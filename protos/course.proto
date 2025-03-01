@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "base.proto";  // Importing common messages
+import "google/protobuf/empty.proto";
+
+package course;
+
+// Course message structure
+message Course {
+    int32 id = 1;
+    string title = 2;
+    int32 instructor_id = 3;
+}
+
+// Requests and responses
+message GetCourseRequest {
+    base.IdRequest id_request = 1;  // Reusing IdRequest
+}
+
+message GetCoursesByInstructorRequest {
+    int32 instructor_id = 1;  // Instructor ID for fetching courses
+}
+
+message GetAllCoursesResponse {
+    repeated Course courses = 1;  // Response with a list of courses
+}
+
+// gRPC service definition
+service CourseService {
+    rpc GetCourseById(GetCourseRequest) returns (Course);
+    rpc GetCoursesByInstructor(GetCoursesByInstructorRequest) returns (GetAllCoursesResponse);
+    rpc GetAllCourses(google.protobuf.Empty) returns (GetAllCoursesResponse); // New method
+    rpc CreateCourse(Course) returns (base.BaseResponse);
+    rpc UpdateCourse(Course) returns (base.BaseResponse);
+    rpc DeleteCourse(base.IdRequest) returns (base.BaseResponse);
+}

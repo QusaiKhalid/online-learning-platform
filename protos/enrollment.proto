@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "base.proto";  // Importing common messages
+import "google/protobuf/empty.proto";
+
+package enrollment;
+
+// Enrollment message structure
+message Enrollment {
+    int32 id = 1;
+    int32 user_id = 2;
+    int32 course_id = 3;
+    string status = 4;
+}
+
+// Requests and responses
+message GetEnrollmentRequest {
+    int32 user_id = 1;   // User ID for fetching enrollment
+    int32 course_id = 2; // Course ID for fetching enrollment
+}
+
+message GetAllEnrollmentsResponse {
+    repeated Enrollment enrollments = 1;  // Response with a list of enrollments
+}
+
+// gRPC service definition
+service EnrollmentService {
+    rpc GetEnrollmentByUserAndCourse(GetEnrollmentRequest) returns (Enrollment);
+    rpc GetAllEnrollments(google.protobuf.Empty) returns (GetAllEnrollmentsResponse); // New method
+    rpc CreateEnrollment(Enrollment) returns (base.BaseResponse);
+    rpc UpdateEnrollment(Enrollment) returns (base.BaseResponse);
+    rpc DeleteEnrollment(base.IdRequest) returns (base.BaseResponse);
+}

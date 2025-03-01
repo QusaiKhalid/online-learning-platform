@@ -1,0 +1,36 @@
+syntax = "proto3";
+
+import "base.proto";  // Importing common messages
+import "google/protobuf/empty.proto";
+
+package lesson;
+
+// Lesson message structure
+message Lesson {
+    int32 id = 1;
+    string title = 2;
+    int32 course_id = 3;
+}
+
+// Requests and responses
+message GetLessonRequest {
+    base.IdRequest id_request = 1;  // Reusing IdRequest
+}
+
+message GetLessonsByCourseRequest {
+    int32 course_id = 1;  // Course ID for fetching lessons
+}
+
+message GetAllLessonsResponse {
+    repeated Lesson lessons = 1;  // Response with a list of lessons
+}
+
+// gRPC service definition
+service LessonService {
+    rpc GetLessonById(GetLessonRequest) returns (Lesson);
+    rpc GetLessonsByCourse(GetLessonsByCourseRequest) returns (GetAllLessonsResponse);
+    rpc GetAllLessons(google.protobuf.Empty) returns (GetAllLessonsResponse); // New method
+    rpc CreateLesson(Lesson) returns (base.BaseResponse);
+    rpc UpdateLesson(Lesson) returns (base.BaseResponse);
+    rpc DeleteLesson(base.IdRequest) returns (base.BaseResponse);
+}

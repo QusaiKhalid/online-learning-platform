@@ -1,0 +1,33 @@
+syntax = "proto3";
+
+import "base.proto";  // Importing common messages
+import "google/protobuf/empty.proto";
+
+package progress;
+
+// Progress message structure
+message Progress {
+    int32 id = 1;
+    int32 user_id = 2;
+    int32 lesson_id = 3;
+    float completion_percentage = 4;
+}
+
+// Requests and responses
+message GetProgressRequest {
+    int32 user_id = 1;   // User ID for fetching progress
+    int32 lesson_id = 2; // Lesson ID for fetching progress
+}
+
+message GetAllProgressResponse {
+    repeated Progress progress_list = 1;  // Response with a list of progress records
+}
+
+// gRPC service definition
+service ProgressService {
+    rpc GetProgressByUserAndLesson(GetProgressRequest) returns (Progress);
+    rpc GetAllProgress(google.protobuf.Empty) returns (GetAllProgressResponse); // New method
+    rpc CreateProgress(Progress) returns (base.BaseResponse);
+    rpc UpdateProgress(Progress) returns (base.BaseResponse);
+    rpc DeleteProgress(base.IdRequest) returns (base.BaseResponse);
+}

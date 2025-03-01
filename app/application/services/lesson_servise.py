@@ -1,33 +1,15 @@
-# services/course_service.py
-from domain.interfaces.repositories.Icourse_repository import ICourseRepository
-from domain.models import Course
-from typing import List, Optional
+from typing import List
+from app.domain.interfaces.repositories.Ilesson_repository import ILessonRepository
+from app.domain.models import Lesson
+from app.application.services.base_servise import BaseService
 
-class CourseService:
-    def __init__(self, course_repository: ICourseRepository):
-        self.course_repository = course_repository
+class LessonService(BaseService[Lesson]):
+    """Service for handling lesson-related operations."""
 
-    def create_course(self, data: dict) -> Course:
-        """Create a new course."""
-        new_course = Course(**data)  # Assuming data is a dictionary that matches Course fields
-        return self.course_repository.create(new_course)
+    def __init__(self, lesson_repository: ILessonRepository):
+        super().__init__(lesson_repository)
+        self.lesson_repository = lesson_repository
 
-    def get_course(self, course_id: int) -> Optional[Course]:
-        """Get a course by ID."""
-        return self.course_repository.get_by_id(course_id)
-
-    def get_all_courses(self) -> List[Course]:
-        """Get all courses."""
-        return self.course_repository.get_all()
-
-    def update_course(self, course_id: int, data: dict) -> Optional[Course]:
-        """Update a course."""
-        return self.course_repository.update(course_id, data)
-
-    def delete_course(self, course_id: int) -> None:
-        """Delete a course."""
-        self.course_repository.delete(course_id)
-
-    def get_courses_by_instructor(self, instructor_id: int) -> List[Course]:
-        """Fetch all courses assigned to a specific instructor."""
-        return self.course_repository.get_by_instructor(instructor_id)
+    def get_lessons_by_course(self, course_id: int) -> List[Lesson]:
+        """Fetch all lessons belonging to a specific course."""
+        return self.lesson_repository.get_by_course(course_id)

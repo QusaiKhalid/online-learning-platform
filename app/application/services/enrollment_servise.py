@@ -1,33 +1,15 @@
-# services/course_service.py
-from domain.interfaces.repositories.Icourse_repository import ICourseRepository
-from domain.models import Course
-from typing import List, Optional
+from typing import Optional
+from app.domain.interfaces.repositories.Ienrollment_repository import IEnrollmentRepository
+from app.domain.models import Enrollment
+from app.application.services.base_servise import BaseService
 
-class CourseService:
-    def __init__(self, course_repository: ICourseRepository):
-        self.course_repository = course_repository
+class EnrollmentService(BaseService[Enrollment]):
+    """Service for handling enrollment-related operations."""
 
-    def create_course(self, data: dict) -> Course:
-        """Create a new course."""
-        new_course = Course(**data)  # Assuming data is a dictionary that matches Course fields
-        return self.course_repository.create(new_course)
+    def __init__(self, enrollment_repository: IEnrollmentRepository):
+        super().__init__(enrollment_repository)
+        self.enrollment_repository = enrollment_repository
 
-    def get_course(self, course_id: int) -> Optional[Course]:
-        """Get a course by ID."""
-        return self.course_repository.get_by_id(course_id)
-
-    def get_all_courses(self) -> List[Course]:
-        """Get all courses."""
-        return self.course_repository.get_all()
-
-    def update_course(self, course_id: int, data: dict) -> Optional[Course]:
-        """Update a course."""
-        return self.course_repository.update(course_id, data)
-
-    def delete_course(self, course_id: int) -> None:
-        """Delete a course."""
-        self.course_repository.delete(course_id)
-
-    def get_courses_by_instructor(self, instructor_id: int) -> List[Course]:
-        """Fetch all courses assigned to a specific instructor."""
-        return self.course_repository.get_by_instructor(instructor_id)
+    def get_enrollment_by_user_and_course(self, user_id: int, course_id: int) -> Optional[Enrollment]:
+        """Fetch an enrollment by user ID and course ID."""
+        return self.enrollment_repository.get_by_user_and_course(user_id, course_id)

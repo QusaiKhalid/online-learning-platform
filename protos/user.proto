@@ -1,0 +1,54 @@
+syntax = "proto3";
+
+import "base.proto";  // Importing common messages
+import "google/protobuf/empty.proto";
+
+package user;
+
+// User message structure
+message User {
+    int32 id = 1;
+    string username = 2;
+    string email = 3;
+}
+
+// Requests and responses
+message GetUserRequest {
+    base.IdRequest id_request = 1;  // Reusing IdRequest
+}
+
+message GetUserByEmailRequest {
+    string email = 1;  // Request to fetch by email
+}
+
+message GetUserByUsernameRequest {
+    string username = 1;  // Request to fetch by username
+}
+
+message CreateUserRequest {
+    string username = 1;
+    string email = 2;
+}
+
+message UpdateUserRequest {
+    base.UpdateRequest update_request = 1;  // Reusing UpdateRequest
+}
+
+message GetUserResponse {
+    User user = 1;  // Specific user response
+}
+
+message GetAllUsersResponse {
+    repeated User users = 1;  // Response with a list of users
+}
+
+// gRPC service definition
+service UserService {
+    rpc GetUserById(GetUserRequest) returns (GetUserResponse);
+    rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserResponse);
+    rpc GetUserByUsername(GetUserByUsernameRequest) returns (GetUserResponse);
+    rpc GetAllUsers(google.protobuf.Empty) returns (GetAllUsersResponse);
+    rpc CreateUser(CreateUserRequest) returns (base.BaseResponse);
+    rpc UpdateUser(UpdateUserRequest) returns (base.BaseResponse);
+    rpc DeleteUser(base.IdRequest) returns (base.BaseResponse);
+}
