@@ -1,5 +1,5 @@
 from typing import TypeVar, Generic, Optional, List
-from domain.interfaces.repositories.Ibase_repository import IBaseRepository
+from app.domain.interfaces.repositories.Ibase_repository import IBaseRepository
 
 T = TypeVar("T")  # Generic model type (User, Course, etc.)
 

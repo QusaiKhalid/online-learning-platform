@@ -22,23 +22,26 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-import base_pb2 as base__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0eprogress.proto\x12\x08progress\x1a\nbase.proto\x1a\x1bgoogle/protobuf/empty.proto\"Y\n\x08Progress\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\x12\x11\n\tlesson_id\x18\x03 \x01(\x05\x12\x1d\n\x15\x63ompletion_percentage\x18\x04 \x01(\x02\"8\n\x12GetProgressRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\x05\x12\x11\n\tlesson_id\x18\x02 \x01(\x05\"C\n\x16GetAllProgressResponse\x12)\n\rprogress_list\x18\x01 \x03(\x0b\x32\x12.progress.Progress2\xd8\x02\n\x0fProgressService\x12N\n\x1aGetProgressByUserAndLesson\x12\x1c.progress.GetProgressRequest\x1a\x12.progress.Progress\x12J\n\x0eGetAllProgress\x12\x16.google.protobuf.Empty\x1a .progress.GetAllProgressResponse\x12\x38\n\x0e\x43reateProgress\x12\x12.progress.Progress\x1a\x12.base.BaseResponse\x12\x38\n\x0eUpdateProgress\x12\x12.progress.Progress\x1a\x12.base.BaseResponse\x12\x35\n\x0e\x44\x65leteProgress\x12\x0f.base.IdRequest\x1a\x12.base.BaseResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0eprogress.proto\x12\x08progress\x1a\x1bgoogle/protobuf/empty.proto\"Y\n\x08Progress\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\x12\x11\n\tlesson_id\x18\x03 \x01(\x05\x12\x1d\n\x15\x63ompletion_percentage\x18\x04 \x01(\x02\"8\n\x12GetProgressRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\x05\x12\x11\n\tlesson_id\x18\x02 \x01(\x05\"C\n\x16GetAllProgressResponse\x12)\n\rprogress_list\x18\x01 \x03(\x0b\x32\x12.progress.Progress\"\x17\n\tIdRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"0\n\x0c\x42\x61seResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\xe8\x02\n\x0fProgressService\x12N\n\x1aGetProgressByUserAndLesson\x12\x1c.progress.GetProgressRequest\x1a\x12.progress.Progress\x12J\n\x0eGetAllProgress\x12\x16.google.protobuf.Empty\x1a .progress.GetAllProgressResponse\x12<\n\x0e\x43reateProgress\x12\x12.progress.Progress\x1a\x16.progress.BaseResponse\x12<\n\x0eUpdateProgress\x12\x12.progress.Progress\x1a\x16.progress.BaseResponse\x12=\n\x0e\x44\x65leteProgress\x12\x13.progress.IdRequest\x1a\x16.progress.BaseResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'progress_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_PROGRESS']._serialized_start=69
-  _globals['_PROGRESS']._serialized_end=158
-  _globals['_GETPROGRESSREQUEST']._serialized_start=160
-  _globals['_GETPROGRESSREQUEST']._serialized_end=216
-  _globals['_GETALLPROGRESSRESPONSE']._serialized_start=218
-  _globals['_GETALLPROGRESSRESPONSE']._serialized_end=285
-  _globals['_PROGRESSSERVICE']._serialized_start=288
-  _globals['_PROGRESSSERVICE']._serialized_end=632
+  _globals['_PROGRESS']._serialized_start=57
+  _globals['_PROGRESS']._serialized_end=146
+  _globals['_GETPROGRESSREQUEST']._serialized_start=148
+  _globals['_GETPROGRESSREQUEST']._serialized_end=204
+  _globals['_GETALLPROGRESSRESPONSE']._serialized_start=206
+  _globals['_GETALLPROGRESSRESPONSE']._serialized_end=273
+  _globals['_IDREQUEST']._serialized_start=275
+  _globals['_IDREQUEST']._serialized_end=298
+  _globals['_BASERESPONSE']._serialized_start=300
+  _globals['_BASERESPONSE']._serialized_end=348
+  _globals['_PROGRESSSERVICE']._serialized_start=351
+  _globals['_PROGRESSSERVICE']._serialized_end=711
 # @@protoc_insertion_point(module_scope)

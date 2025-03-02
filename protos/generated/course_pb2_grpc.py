@@ -3,8 +3,7 @@
 import grpc
 import warnings
 
-import base_pb2 as base__pb2
-import course_pb2 as course__pb2
+from protos.generated import course_pb2 as course__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 GRPC_GENERATED_VERSION = '1.69.0'
@@ -28,8 +27,7 @@ if _version_not_supported:
 
 
 class CourseServiceStub(object):
-    """gRPC service definition
-    """
+    """Missing associated documentation comment in .proto file."""
 
     def __init__(self, channel):
         """Constructor.
@@ -39,7 +37,7 @@ class CourseServiceStub(object):
         """
         self.GetCourseById = channel.unary_unary(
                 '/course.CourseService/GetCourseById',
-                request_serializer=course__pb2.GetCourseRequest.SerializeToString,
+                request_serializer=course__pb2.IdRequest.SerializeToString,
                 response_deserializer=course__pb2.Course.FromString,
                 _registered_method=True)
         self.GetCoursesByInstructor = channel.unary_unary(
@@ -55,23 +53,22 @@ class CourseServiceStub(object):
         self.CreateCourse = channel.unary_unary(
                 '/course.CourseService/CreateCourse',
                 request_serializer=course__pb2.Course.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                response_deserializer=course__pb2.BaseResponse.FromString,
                 _registered_method=True)
         self.UpdateCourse = channel.unary_unary(
                 '/course.CourseService/UpdateCourse',
                 request_serializer=course__pb2.Course.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                response_deserializer=course__pb2.BaseResponse.FromString,
                 _registered_method=True)
         self.DeleteCourse = channel.unary_unary(
                 '/course.CourseService/DeleteCourse',
-                request_serializer=base__pb2.IdRequest.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                request_serializer=course__pb2.IdRequest.SerializeToString,
+                response_deserializer=course__pb2.BaseResponse.FromString,
                 _registered_method=True)
 
 
 class CourseServiceServicer(object):
-    """gRPC service definition
-    """
+    """Missing associated documentation comment in .proto file."""
 
     def GetCourseById(self, request, context):
         """Missing associated documentation comment in .proto file."""
@@ -86,8 +83,7 @@ class CourseServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetAllCourses(self, request, context):
-        """New method
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -115,7 +111,7 @@ def add_CourseServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
             'GetCourseById': grpc.unary_unary_rpc_method_handler(
                     servicer.GetCourseById,
-                    request_deserializer=course__pb2.GetCourseRequest.FromString,
+                    request_deserializer=course__pb2.IdRequest.FromString,
                     response_serializer=course__pb2.Course.SerializeToString,
             ),
             'GetCoursesByInstructor': grpc.unary_unary_rpc_method_handler(
@@ -131,17 +127,17 @@ def add_CourseServiceServicer_to_server(servicer, server):
             'CreateCourse': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateCourse,
                     request_deserializer=course__pb2.Course.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    response_serializer=course__pb2.BaseResponse.SerializeToString,
             ),
             'UpdateCourse': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateCourse,
                     request_deserializer=course__pb2.Course.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    response_serializer=course__pb2.BaseResponse.SerializeToString,
             ),
             'DeleteCourse': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteCourse,
-                    request_deserializer=base__pb2.IdRequest.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    request_deserializer=course__pb2.IdRequest.FromString,
+                    response_serializer=course__pb2.BaseResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -152,8 +148,7 @@ def add_CourseServiceServicer_to_server(servicer, server):
 
  # This class is part of an EXPERIMENTAL API.
 class CourseService(object):
-    """gRPC service definition
-    """
+    """Missing associated documentation comment in .proto file."""
 
     @staticmethod
     def GetCourseById(request,
@@ -170,7 +165,7 @@ class CourseService(object):
             request,
             target,
             '/course.CourseService/GetCourseById',
-            course__pb2.GetCourseRequest.SerializeToString,
+            course__pb2.IdRequest.SerializeToString,
             course__pb2.Course.FromString,
             options,
             channel_credentials,
@@ -252,7 +247,7 @@ class CourseService(object):
             target,
             '/course.CourseService/CreateCourse',
             course__pb2.Course.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            course__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -279,7 +274,7 @@ class CourseService(object):
             target,
             '/course.CourseService/UpdateCourse',
             course__pb2.Course.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            course__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -305,8 +300,8 @@ class CourseService(object):
             request,
             target,
             '/course.CourseService/DeleteCourse',
-            base__pb2.IdRequest.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            course__pb2.IdRequest.SerializeToString,
+            course__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,

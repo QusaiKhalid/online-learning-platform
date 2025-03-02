@@ -32,9 +32,11 @@ class BaseRepository(IBaseRepository[T], Generic[T]):
         self.db_session.commit()
         return entity
 
-    def delete(self, entity_id: int) -> None:
+    def delete(self, entity_id: int) -> bool:
         """Soft delete an entity by setting is_deleted=True instead of actual deletion."""
         entity = self.get_by_id(entity_id)
-        if entity:
-            entity.is_deleted = True
-            self.db_session.commit()
+        if not entity:
+            return False  # Entity not found
+        entity.is_deleted = True
+        self.db_session.commit()
+        return True  # Deletion successful

@@ -1,54 +1,71 @@
 syntax = "proto3";
 
-import "base.proto";  // Importing common messages
-import "google/protobuf/empty.proto";
-
 package user;
 
-// User message structure
-message User {
-    int32 id = 1;
-    string username = 2;
-    string email = 3;
-}
+// Importing required type from Google Protocol Buffers
+import "google/protobuf/empty.proto";
 
-// Requests and responses
+// Message for requesting a user by ID
 message GetUserRequest {
-    base.IdRequest id_request = 1;  // Reusing IdRequest
+    int32 id = 1;
 }
 
+// Message for requesting a user by email
 message GetUserByEmailRequest {
-    string email = 1;  // Request to fetch by email
+    string email = 1;
 }
 
+// Message for requesting a user by username
 message GetUserByUsernameRequest {
-    string username = 1;  // Request to fetch by username
-}
-
-message CreateUserRequest {
     string username = 1;
-    string email = 2;
 }
 
-message UpdateUserRequest {
-    base.UpdateRequest update_request = 1;  // Reusing UpdateRequest
-}
-
+// Response message for a user
 message GetUserResponse {
-    User user = 1;  // Specific user response
+    int32 id = 1;
+    string email = 2;
+    string username = 3;
+    string message = 4;
 }
 
+// Response for getting all users
 message GetAllUsersResponse {
-    repeated User users = 1;  // Response with a list of users
+    repeated GetUserResponse users = 1;
 }
 
-// gRPC service definition
+// Request message for creating a user
+message CreateUserRequest {
+    string email = 1;
+    string username = 2;
+    string password = 3;  // Added password field
+    string role = 4;  // Optional role field
+}
+
+// Request message for updating a user
+message UpdateUserRequest {
+    int32 id = 1;
+    string email = 2;
+    string username = 3;
+}
+
+// Request message for deleting a user
+message IdRequest {
+    int32 id = 1;
+}
+
+// Base response message
+message BaseResponse {
+    bool success = 1;
+    string message = 2;
+}
+
+// Service definition
 service UserService {
     rpc GetUserById(GetUserRequest) returns (GetUserResponse);
     rpc GetUserByEmail(GetUserByEmailRequest) returns (GetUserResponse);
     rpc GetUserByUsername(GetUserByUsernameRequest) returns (GetUserResponse);
     rpc GetAllUsers(google.protobuf.Empty) returns (GetAllUsersResponse);
-    rpc CreateUser(CreateUserRequest) returns (base.BaseResponse);
-    rpc UpdateUser(UpdateUserRequest) returns (base.BaseResponse);
-    rpc DeleteUser(base.IdRequest) returns (base.BaseResponse);
+    rpc CreateUser(CreateUserRequest) returns (BaseResponse);
+    rpc UpdateUser(UpdateUserRequest) returns (BaseResponse);
+    rpc DeleteUser(IdRequest) returns (BaseResponse);
 }

@@ -22,25 +22,26 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-import base_pb2 as base__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x63ourse.proto\x12\x06\x63ourse\x1a\nbase.proto\x1a\x1bgoogle/protobuf/empty.proto\":\n\x06\x43ourse\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x15\n\rinstructor_id\x18\x03 \x01(\x05\"7\n\x10GetCourseRequest\x12#\n\nid_request\x18\x01 \x01(\x0b\x32\x0f.base.IdRequest\"6\n\x1dGetCoursesByInstructorRequest\x12\x15\n\rinstructor_id\x18\x01 \x01(\x05\"8\n\x15GetAllCoursesResponse\x12\x1f\n\x07\x63ourses\x18\x01 \x03(\x0b\x32\x0e.course.Course2\x8f\x03\n\rCourseService\x12\x39\n\rGetCourseById\x12\x18.course.GetCourseRequest\x1a\x0e.course.Course\x12^\n\x16GetCoursesByInstructor\x12%.course.GetCoursesByInstructorRequest\x1a\x1d.course.GetAllCoursesResponse\x12\x46\n\rGetAllCourses\x12\x16.google.protobuf.Empty\x1a\x1d.course.GetAllCoursesResponse\x12\x32\n\x0c\x43reateCourse\x12\x0e.course.Course\x1a\x12.base.BaseResponse\x12\x32\n\x0cUpdateCourse\x12\x0e.course.Course\x1a\x12.base.BaseResponse\x12\x33\n\x0c\x44\x65leteCourse\x12\x0f.base.IdRequest\x1a\x12.base.BaseResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0c\x63ourse.proto\x12\x06\x63ourse\x1a\x1bgoogle/protobuf/empty.proto\":\n\x06\x43ourse\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x15\n\rinstructor_id\x18\x03 \x01(\x05\"\x17\n\tIdRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"0\n\x0c\x42\x61seResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t\"6\n\x1dGetCoursesByInstructorRequest\x12\x15\n\rinstructor_id\x18\x01 \x01(\x05\"8\n\x15GetAllCoursesResponse\x12\x1f\n\x07\x63ourses\x18\x01 \x03(\x0b\x32\x0e.course.Course2\x90\x03\n\rCourseService\x12\x32\n\rGetCourseById\x12\x11.course.IdRequest\x1a\x0e.course.Course\x12^\n\x16GetCoursesByInstructor\x12%.course.GetCoursesByInstructorRequest\x1a\x1d.course.GetAllCoursesResponse\x12\x46\n\rGetAllCourses\x12\x16.google.protobuf.Empty\x1a\x1d.course.GetAllCoursesResponse\x12\x34\n\x0c\x43reateCourse\x12\x0e.course.Course\x1a\x14.course.BaseResponse\x12\x34\n\x0cUpdateCourse\x12\x0e.course.Course\x1a\x14.course.BaseResponse\x12\x37\n\x0c\x44\x65leteCourse\x12\x11.course.IdRequest\x1a\x14.course.BaseResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'course_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_COURSE']._serialized_start=65
-  _globals['_COURSE']._serialized_end=123
-  _globals['_GETCOURSEREQUEST']._serialized_start=125
-  _globals['_GETCOURSEREQUEST']._serialized_end=180
-  _globals['_GETCOURSESBYINSTRUCTORREQUEST']._serialized_start=182
-  _globals['_GETCOURSESBYINSTRUCTORREQUEST']._serialized_end=236
-  _globals['_GETALLCOURSESRESPONSE']._serialized_start=238
-  _globals['_GETALLCOURSESRESPONSE']._serialized_end=294
-  _globals['_COURSESERVICE']._serialized_start=297
-  _globals['_COURSESERVICE']._serialized_end=696
+  _globals['_COURSE']._serialized_start=53
+  _globals['_COURSE']._serialized_end=111
+  _globals['_IDREQUEST']._serialized_start=113
+  _globals['_IDREQUEST']._serialized_end=136
+  _globals['_BASERESPONSE']._serialized_start=138
+  _globals['_BASERESPONSE']._serialized_end=186
+  _globals['_GETCOURSESBYINSTRUCTORREQUEST']._serialized_start=188
+  _globals['_GETCOURSESBYINSTRUCTORREQUEST']._serialized_end=242
+  _globals['_GETALLCOURSESRESPONSE']._serialized_start=244
+  _globals['_GETALLCOURSESRESPONSE']._serialized_end=300
+  _globals['_COURSESERVICE']._serialized_start=303
+  _globals['_COURSESERVICE']._serialized_end=703
 # @@protoc_insertion_point(module_scope)

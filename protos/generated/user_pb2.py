@@ -22,33 +22,34 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-import base_pb2 as base__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nuser.proto\x12\x04user\x1a\nbase.proto\x1a\x1bgoogle/protobuf/empty.proto\"3\n\x04User\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x10\n\x08username\x18\x02 \x01(\t\x12\r\n\x05\x65mail\x18\x03 \x01(\t\"5\n\x0eGetUserRequest\x12#\n\nid_request\x18\x01 \x01(\x0b\x32\x0f.base.IdRequest\"&\n\x15GetUserByEmailRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\",\n\x18GetUserByUsernameRequest\x12\x10\n\x08username\x18\x01 \x01(\t\"4\n\x11\x43reateUserRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\"@\n\x11UpdateUserRequest\x12+\n\x0eupdate_request\x18\x01 \x01(\x0b\x32\x13.base.UpdateRequest\"+\n\x0fGetUserResponse\x12\x18\n\x04user\x18\x01 \x01(\x0b\x32\n.user.User\"0\n\x13GetAllUsersResponse\x12\x19\n\x05users\x18\x01 \x03(\x0b\x32\n.user.User2\xc6\x03\n\x0bUserService\x12:\n\x0bGetUserById\x12\x14.user.GetUserRequest\x1a\x15.user.GetUserResponse\x12\x44\n\x0eGetUserByEmail\x12\x1b.user.GetUserByEmailRequest\x1a\x15.user.GetUserResponse\x12J\n\x11GetUserByUsername\x12\x1e.user.GetUserByUsernameRequest\x1a\x15.user.GetUserResponse\x12@\n\x0bGetAllUsers\x12\x16.google.protobuf.Empty\x1a\x19.user.GetAllUsersResponse\x12\x39\n\nCreateUser\x12\x17.user.CreateUserRequest\x1a\x12.base.BaseResponse\x12\x39\n\nUpdateUser\x12\x17.user.UpdateUserRequest\x1a\x12.base.BaseResponse\x12\x31\n\nDeleteUser\x12\x0f.base.IdRequest\x1a\x12.base.BaseResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nuser.proto\x12\x04user\x1a\x1bgoogle/protobuf/empty.proto\"\x1c\n\x0eGetUserRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"&\n\x15GetUserByEmailRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\",\n\x18GetUserByUsernameRequest\x12\x10\n\x08username\x18\x01 \x01(\t\"O\n\x0fGetUserResponse\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08username\x18\x03 \x01(\t\x12\x0f\n\x07message\x18\x04 \x01(\t\";\n\x13GetAllUsersResponse\x12$\n\x05users\x18\x01 \x03(\x0b\x32\x15.user.GetUserResponse\"T\n\x11\x43reateUserRequest\x12\r\n\x05\x65mail\x18\x01 \x01(\t\x12\x10\n\x08username\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x0c\n\x04role\x18\x04 \x01(\t\"@\n\x11UpdateUserRequest\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08username\x18\x03 \x01(\t\"\x17\n\tIdRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"0\n\x0c\x42\x61seResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\xc6\x03\n\x0bUserService\x12:\n\x0bGetUserById\x12\x14.user.GetUserRequest\x1a\x15.user.GetUserResponse\x12\x44\n\x0eGetUserByEmail\x12\x1b.user.GetUserByEmailRequest\x1a\x15.user.GetUserResponse\x12J\n\x11GetUserByUsername\x12\x1e.user.GetUserByUsernameRequest\x1a\x15.user.GetUserResponse\x12@\n\x0bGetAllUsers\x12\x16.google.protobuf.Empty\x1a\x19.user.GetAllUsersResponse\x12\x39\n\nCreateUser\x12\x17.user.CreateUserRequest\x1a\x12.user.BaseResponse\x12\x39\n\nUpdateUser\x12\x17.user.UpdateUserRequest\x1a\x12.user.BaseResponse\x12\x31\n\nDeleteUser\x12\x0f.user.IdRequest\x1a\x12.user.BaseResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'user_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_USER']._serialized_start=61
-  _globals['_USER']._serialized_end=112
-  _globals['_GETUSERREQUEST']._serialized_start=114
-  _globals['_GETUSERREQUEST']._serialized_end=167
-  _globals['_GETUSERBYEMAILREQUEST']._serialized_start=169
-  _globals['_GETUSERBYEMAILREQUEST']._serialized_end=207
-  _globals['_GETUSERBYUSERNAMEREQUEST']._serialized_start=209
-  _globals['_GETUSERBYUSERNAMEREQUEST']._serialized_end=253
-  _globals['_CREATEUSERREQUEST']._serialized_start=255
-  _globals['_CREATEUSERREQUEST']._serialized_end=307
-  _globals['_UPDATEUSERREQUEST']._serialized_start=309
-  _globals['_UPDATEUSERREQUEST']._serialized_end=373
-  _globals['_GETUSERRESPONSE']._serialized_start=375
-  _globals['_GETUSERRESPONSE']._serialized_end=418
-  _globals['_GETALLUSERSRESPONSE']._serialized_start=420
-  _globals['_GETALLUSERSRESPONSE']._serialized_end=468
-  _globals['_USERSERVICE']._serialized_start=471
-  _globals['_USERSERVICE']._serialized_end=925
+  _globals['_GETUSERREQUEST']._serialized_start=49
+  _globals['_GETUSERREQUEST']._serialized_end=77
+  _globals['_GETUSERBYEMAILREQUEST']._serialized_start=79
+  _globals['_GETUSERBYEMAILREQUEST']._serialized_end=117
+  _globals['_GETUSERBYUSERNAMEREQUEST']._serialized_start=119
+  _globals['_GETUSERBYUSERNAMEREQUEST']._serialized_end=163
+  _globals['_GETUSERRESPONSE']._serialized_start=165
+  _globals['_GETUSERRESPONSE']._serialized_end=244
+  _globals['_GETALLUSERSRESPONSE']._serialized_start=246
+  _globals['_GETALLUSERSRESPONSE']._serialized_end=305
+  _globals['_CREATEUSERREQUEST']._serialized_start=307
+  _globals['_CREATEUSERREQUEST']._serialized_end=391
+  _globals['_UPDATEUSERREQUEST']._serialized_start=393
+  _globals['_UPDATEUSERREQUEST']._serialized_end=457
+  _globals['_IDREQUEST']._serialized_start=459
+  _globals['_IDREQUEST']._serialized_end=482
+  _globals['_BASERESPONSE']._serialized_start=484
+  _globals['_BASERESPONSE']._serialized_end=532
+  _globals['_USERSERVICE']._serialized_start=535
+  _globals['_USERSERVICE']._serialized_end=989
 # @@protoc_insertion_point(module_scope)

@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import List
 from app.domain.models import Course
-from app.domain.interfaces.repositories.Ibase_repository import BaseRepository
+from app.domain.interfaces.repositories.Ibase_repository import IBaseRepository
 
-class ICourseRepository(BaseRepository[Course], ABC):
+class ICourseRepository(IBaseRepository[Course], ABC):
     """Interface for course-specific database operations."""
 
     @abstractmethod

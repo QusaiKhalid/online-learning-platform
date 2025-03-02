@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "base.proto";  // Importing common messages
 import "google/protobuf/empty.proto";
 
 package progress;
@@ -23,11 +22,21 @@ message GetAllProgressResponse {
     repeated Progress progress_list = 1;  // Response with a list of progress records
 }
 
+// Common messages (previously from base.proto)
+message IdRequest {
+    int32 id = 1;
+}
+
+message BaseResponse {
+    bool success = 1;
+    string message = 2;
+}
+
 // gRPC service definition
 service ProgressService {
     rpc GetProgressByUserAndLesson(GetProgressRequest) returns (Progress);
-    rpc GetAllProgress(google.protobuf.Empty) returns (GetAllProgressResponse); // New method
-    rpc CreateProgress(Progress) returns (base.BaseResponse);
-    rpc UpdateProgress(Progress) returns (base.BaseResponse);
-    rpc DeleteProgress(base.IdRequest) returns (base.BaseResponse);
+    rpc GetAllProgress(google.protobuf.Empty) returns (GetAllProgressResponse);
+    rpc CreateProgress(Progress) returns (BaseResponse);
+    rpc UpdateProgress(Progress) returns (BaseResponse);
+    rpc DeleteProgress(IdRequest) returns (BaseResponse);
 }

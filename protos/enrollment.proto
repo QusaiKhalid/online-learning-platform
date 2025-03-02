@@ -1,6 +1,5 @@
 syntax = "proto3";
 
-import "base.proto";  // Importing common messages
 import "google/protobuf/empty.proto";
 
 package enrollment;
@@ -23,11 +22,21 @@ message GetAllEnrollmentsResponse {
     repeated Enrollment enrollments = 1;  // Response with a list of enrollments
 }
 
+// Common messages (previously from base.proto)
+message IdRequest {
+    int32 id = 1;
+}
+
+message BaseResponse {
+    bool success = 1;
+    string message = 2;
+}
+
 // gRPC service definition
 service EnrollmentService {
     rpc GetEnrollmentByUserAndCourse(GetEnrollmentRequest) returns (Enrollment);
-    rpc GetAllEnrollments(google.protobuf.Empty) returns (GetAllEnrollmentsResponse); // New method
-    rpc CreateEnrollment(Enrollment) returns (base.BaseResponse);
-    rpc UpdateEnrollment(Enrollment) returns (base.BaseResponse);
-    rpc DeleteEnrollment(base.IdRequest) returns (base.BaseResponse);
+    rpc GetAllEnrollments(google.protobuf.Empty) returns (GetAllEnrollmentsResponse);
+    rpc CreateEnrollment(Enrollment) returns (BaseResponse);
+    rpc UpdateEnrollment(Enrollment) returns (BaseResponse);
+    rpc DeleteEnrollment(IdRequest) returns (BaseResponse);
 }

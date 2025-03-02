@@ -22,23 +22,26 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-import base_pb2 as base__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x65nrollment.proto\x12\nenrollment\x1a\nbase.proto\x1a\x1bgoogle/protobuf/empty.proto\"L\n\nEnrollment\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\x12\x11\n\tcourse_id\x18\x03 \x01(\x05\x12\x0e\n\x06status\x18\x04 \x01(\t\":\n\x14GetEnrollmentRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\x05\x12\x11\n\tcourse_id\x18\x02 \x01(\x05\"H\n\x19GetAllEnrollmentsResponse\x12+\n\x0b\x65nrollments\x18\x01 \x03(\x0b\x32\x16.enrollment.Enrollment2\xfa\x02\n\x11\x45nrollmentService\x12X\n\x1cGetEnrollmentByUserAndCourse\x12 .enrollment.GetEnrollmentRequest\x1a\x16.enrollment.Enrollment\x12R\n\x11GetAllEnrollments\x12\x16.google.protobuf.Empty\x1a%.enrollment.GetAllEnrollmentsResponse\x12>\n\x10\x43reateEnrollment\x12\x16.enrollment.Enrollment\x1a\x12.base.BaseResponse\x12>\n\x10UpdateEnrollment\x12\x16.enrollment.Enrollment\x1a\x12.base.BaseResponse\x12\x37\n\x10\x44\x65leteEnrollment\x12\x0f.base.IdRequest\x1a\x12.base.BaseResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x10\x65nrollment.proto\x12\nenrollment\x1a\x1bgoogle/protobuf/empty.proto\"L\n\nEnrollment\x12\n\n\x02id\x18\x01 \x01(\x05\x12\x0f\n\x07user_id\x18\x02 \x01(\x05\x12\x11\n\tcourse_id\x18\x03 \x01(\x05\x12\x0e\n\x06status\x18\x04 \x01(\t\":\n\x14GetEnrollmentRequest\x12\x0f\n\x07user_id\x18\x01 \x01(\x05\x12\x11\n\tcourse_id\x18\x02 \x01(\x05\"H\n\x19GetAllEnrollmentsResponse\x12+\n\x0b\x65nrollments\x18\x01 \x03(\x0b\x32\x16.enrollment.Enrollment\"\x17\n\tIdRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"0\n\x0c\x42\x61seResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\x92\x03\n\x11\x45nrollmentService\x12X\n\x1cGetEnrollmentByUserAndCourse\x12 .enrollment.GetEnrollmentRequest\x1a\x16.enrollment.Enrollment\x12R\n\x11GetAllEnrollments\x12\x16.google.protobuf.Empty\x1a%.enrollment.GetAllEnrollmentsResponse\x12\x44\n\x10\x43reateEnrollment\x12\x16.enrollment.Enrollment\x1a\x18.enrollment.BaseResponse\x12\x44\n\x10UpdateEnrollment\x12\x16.enrollment.Enrollment\x1a\x18.enrollment.BaseResponse\x12\x43\n\x10\x44\x65leteEnrollment\x12\x15.enrollment.IdRequest\x1a\x18.enrollment.BaseResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'enrollment_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_ENROLLMENT']._serialized_start=73
-  _globals['_ENROLLMENT']._serialized_end=149
-  _globals['_GETENROLLMENTREQUEST']._serialized_start=151
-  _globals['_GETENROLLMENTREQUEST']._serialized_end=209
-  _globals['_GETALLENROLLMENTSRESPONSE']._serialized_start=211
-  _globals['_GETALLENROLLMENTSRESPONSE']._serialized_end=283
-  _globals['_ENROLLMENTSERVICE']._serialized_start=286
-  _globals['_ENROLLMENTSERVICE']._serialized_end=664
+  _globals['_ENROLLMENT']._serialized_start=61
+  _globals['_ENROLLMENT']._serialized_end=137
+  _globals['_GETENROLLMENTREQUEST']._serialized_start=139
+  _globals['_GETENROLLMENTREQUEST']._serialized_end=197
+  _globals['_GETALLENROLLMENTSRESPONSE']._serialized_start=199
+  _globals['_GETALLENROLLMENTSRESPONSE']._serialized_end=271
+  _globals['_IDREQUEST']._serialized_start=273
+  _globals['_IDREQUEST']._serialized_end=296
+  _globals['_BASERESPONSE']._serialized_start=298
+  _globals['_BASERESPONSE']._serialized_end=346
+  _globals['_ENROLLMENTSERVICE']._serialized_start=349
+  _globals['_ENROLLMENTSERVICE']._serialized_end=751
 # @@protoc_insertion_point(module_scope)

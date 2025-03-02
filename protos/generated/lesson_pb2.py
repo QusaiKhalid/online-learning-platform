@@ -22,25 +22,28 @@ _runtime_version.ValidateProtobufRuntimeVersion(
 _sym_db = _symbol_database.Default()
 
 
-import base_pb2 as base__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0clesson.proto\x12\x06lesson\x1a\nbase.proto\x1a\x1bgoogle/protobuf/empty.proto\"6\n\x06Lesson\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x11\n\tcourse_id\x18\x03 \x01(\x05\"7\n\x10GetLessonRequest\x12#\n\nid_request\x18\x01 \x01(\x0b\x32\x0f.base.IdRequest\".\n\x19GetLessonsByCourseRequest\x12\x11\n\tcourse_id\x18\x01 \x01(\x05\"8\n\x15GetAllLessonsResponse\x12\x1f\n\x07lessons\x18\x01 \x03(\x0b\x32\x0e.lesson.Lesson2\x87\x03\n\rLessonService\x12\x39\n\rGetLessonById\x12\x18.lesson.GetLessonRequest\x1a\x0e.lesson.Lesson\x12V\n\x12GetLessonsByCourse\x12!.lesson.GetLessonsByCourseRequest\x1a\x1d.lesson.GetAllLessonsResponse\x12\x46\n\rGetAllLessons\x12\x16.google.protobuf.Empty\x1a\x1d.lesson.GetAllLessonsResponse\x12\x32\n\x0c\x43reateLesson\x12\x0e.lesson.Lesson\x1a\x12.base.BaseResponse\x12\x32\n\x0cUpdateLesson\x12\x0e.lesson.Lesson\x1a\x12.base.BaseResponse\x12\x33\n\x0c\x44\x65leteLesson\x12\x0f.base.IdRequest\x1a\x12.base.BaseResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\x0clesson.proto\x12\x06lesson\x1a\x1bgoogle/protobuf/empty.proto\"6\n\x06Lesson\x12\n\n\x02id\x18\x01 \x01(\x05\x12\r\n\x05title\x18\x02 \x01(\t\x12\x11\n\tcourse_id\x18\x03 \x01(\x05\"\x1e\n\x10GetLessonRequest\x12\n\n\x02id\x18\x01 \x01(\x05\".\n\x19GetLessonsByCourseRequest\x12\x11\n\tcourse_id\x18\x01 \x01(\x05\"8\n\x15GetAllLessonsResponse\x12\x1f\n\x07lessons\x18\x01 \x03(\x0b\x32\x0e.lesson.Lesson\"\x17\n\tIdRequest\x12\n\n\x02id\x18\x01 \x01(\x05\"0\n\x0c\x42\x61seResponse\x12\x0f\n\x07success\x18\x01 \x01(\x08\x12\x0f\n\x07message\x18\x02 \x01(\t2\x8f\x03\n\rLessonService\x12\x39\n\rGetLessonById\x12\x18.lesson.GetLessonRequest\x1a\x0e.lesson.Lesson\x12V\n\x12GetLessonsByCourse\x12!.lesson.GetLessonsByCourseRequest\x1a\x1d.lesson.GetAllLessonsResponse\x12\x46\n\rGetAllLessons\x12\x16.google.protobuf.Empty\x1a\x1d.lesson.GetAllLessonsResponse\x12\x34\n\x0c\x43reateLesson\x12\x0e.lesson.Lesson\x1a\x14.lesson.BaseResponse\x12\x34\n\x0cUpdateLesson\x12\x0e.lesson.Lesson\x1a\x14.lesson.BaseResponse\x12\x37\n\x0c\x44\x65leteLesson\x12\x11.lesson.IdRequest\x1a\x14.lesson.BaseResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
 _builder.BuildTopDescriptorsAndMessages(DESCRIPTOR, 'lesson_pb2', _globals)
 if not _descriptor._USE_C_DESCRIPTORS:
   DESCRIPTOR._loaded_options = None
-  _globals['_LESSON']._serialized_start=65
-  _globals['_LESSON']._serialized_end=119
-  _globals['_GETLESSONREQUEST']._serialized_start=121
-  _globals['_GETLESSONREQUEST']._serialized_end=176
-  _globals['_GETLESSONSBYCOURSEREQUEST']._serialized_start=178
-  _globals['_GETLESSONSBYCOURSEREQUEST']._serialized_end=224
-  _globals['_GETALLLESSONSRESPONSE']._serialized_start=226
-  _globals['_GETALLLESSONSRESPONSE']._serialized_end=282
-  _globals['_LESSONSERVICE']._serialized_start=285
-  _globals['_LESSONSERVICE']._serialized_end=676
+  _globals['_LESSON']._serialized_start=53
+  _globals['_LESSON']._serialized_end=107
+  _globals['_GETLESSONREQUEST']._serialized_start=109
+  _globals['_GETLESSONREQUEST']._serialized_end=139
+  _globals['_GETLESSONSBYCOURSEREQUEST']._serialized_start=141
+  _globals['_GETLESSONSBYCOURSEREQUEST']._serialized_end=187
+  _globals['_GETALLLESSONSRESPONSE']._serialized_start=189
+  _globals['_GETALLLESSONSRESPONSE']._serialized_end=245
+  _globals['_IDREQUEST']._serialized_start=247
+  _globals['_IDREQUEST']._serialized_end=270
+  _globals['_BASERESPONSE']._serialized_start=272
+  _globals['_BASERESPONSE']._serialized_end=320
+  _globals['_LESSONSERVICE']._serialized_start=323
+  _globals['_LESSONSERVICE']._serialized_end=722
 # @@protoc_insertion_point(module_scope)

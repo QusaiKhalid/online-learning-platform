@@ -5,4 +5,4 @@ app = create_app()
 
 if __name__ == '__main__':
     # Run the app in debug mode (only for development)
-    app.run(debug=True)
+    app.run(debug=False)

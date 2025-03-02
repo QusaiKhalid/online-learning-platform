@@ -3,9 +3,8 @@
 import grpc
 import warnings
 
-import base_pb2 as base__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
-import progress_pb2 as progress__pb2
+from protos.generated import progress_pb2 as progress__pb2
 
 GRPC_GENERATED_VERSION = '1.69.0'
 GRPC_VERSION = grpc.__version__
@@ -50,17 +49,17 @@ class ProgressServiceStub(object):
         self.CreateProgress = channel.unary_unary(
                 '/progress.ProgressService/CreateProgress',
                 request_serializer=progress__pb2.Progress.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                response_deserializer=progress__pb2.BaseResponse.FromString,
                 _registered_method=True)
         self.UpdateProgress = channel.unary_unary(
                 '/progress.ProgressService/UpdateProgress',
                 request_serializer=progress__pb2.Progress.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                response_deserializer=progress__pb2.BaseResponse.FromString,
                 _registered_method=True)
         self.DeleteProgress = channel.unary_unary(
                 '/progress.ProgressService/DeleteProgress',
-                request_serializer=base__pb2.IdRequest.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                request_serializer=progress__pb2.IdRequest.SerializeToString,
+                response_deserializer=progress__pb2.BaseResponse.FromString,
                 _registered_method=True)
 
 
@@ -75,8 +74,7 @@ class ProgressServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetAllProgress(self, request, context):
-        """New method
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -115,17 +113,17 @@ def add_ProgressServiceServicer_to_server(servicer, server):
             'CreateProgress': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateProgress,
                     request_deserializer=progress__pb2.Progress.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    response_serializer=progress__pb2.BaseResponse.SerializeToString,
             ),
             'UpdateProgress': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateProgress,
                     request_deserializer=progress__pb2.Progress.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    response_serializer=progress__pb2.BaseResponse.SerializeToString,
             ),
             'DeleteProgress': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteProgress,
-                    request_deserializer=base__pb2.IdRequest.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    request_deserializer=progress__pb2.IdRequest.FromString,
+                    response_serializer=progress__pb2.BaseResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -209,7 +207,7 @@ class ProgressService(object):
             target,
             '/progress.ProgressService/CreateProgress',
             progress__pb2.Progress.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            progress__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -236,7 +234,7 @@ class ProgressService(object):
             target,
             '/progress.ProgressService/UpdateProgress',
             progress__pb2.Progress.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            progress__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -262,8 +260,8 @@ class ProgressService(object):
             request,
             target,
             '/progress.ProgressService/DeleteProgress',
-            base__pb2.IdRequest.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            progress__pb2.IdRequest.SerializeToString,
+            progress__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,

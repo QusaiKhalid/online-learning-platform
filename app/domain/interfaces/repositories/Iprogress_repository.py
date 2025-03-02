@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 from app.domain.models import Progress
-from app.domain.interfaces.repositories.Ibase_repository import BaseRepository
+from app.domain.interfaces.repositories.Ibase_repository import IBaseRepository
 
-class IProgressRepository(BaseRepository[Progress], ABC):
+class IProgressRepository(IBaseRepository[Progress], ABC):
     """Interface for tracking user progress on lessons."""
 
     @abstractmethod

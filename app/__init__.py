@@ -44,7 +44,8 @@ def create_app():
     app.keycloak_openid = keycloak_openid
 
     # Register namespaces (we'll define these next)
-    from app.presentation.controllers.keycloak_authurization_controller import register_routes
-    register_routes(api)
-
+    from app.presentation.controllers.keycloak_authurization_controller import keycloak_authurization_controller
+    keycloak_authurization_controller(api)
+    from app.presentation.controllers.user_controller import register_user_routes
+    register_user_routes(api)
     return app

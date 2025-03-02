@@ -1,9 +1,9 @@
 from abc import ABC, abstractmethod
 from typing import Optional
 from app.domain.models import Enrollment
-from app.domain.interfaces.repositories.Ibase_repository import BaseRepository
+from app.domain.interfaces.repositories.Ibase_repository import IBaseRepository
 
-class IEnrollmentRepository(BaseRepository[Enrollment], ABC):
+class IEnrollmentRepository(IBaseRepository[Enrollment], ABC):
     """Interface for enrollment-specific database operations."""
 
     @abstractmethod

@@ -3,9 +3,8 @@
 import grpc
 import warnings
 
-import base_pb2 as base__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
-import lesson_pb2 as lesson__pb2
+from protos.generated import lesson_pb2 as lesson__pb2
 
 GRPC_GENERATED_VERSION = '1.69.0'
 GRPC_VERSION = grpc.__version__
@@ -55,17 +54,17 @@ class LessonServiceStub(object):
         self.CreateLesson = channel.unary_unary(
                 '/lesson.LessonService/CreateLesson',
                 request_serializer=lesson__pb2.Lesson.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                response_deserializer=lesson__pb2.BaseResponse.FromString,
                 _registered_method=True)
         self.UpdateLesson = channel.unary_unary(
                 '/lesson.LessonService/UpdateLesson',
                 request_serializer=lesson__pb2.Lesson.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                response_deserializer=lesson__pb2.BaseResponse.FromString,
                 _registered_method=True)
         self.DeleteLesson = channel.unary_unary(
                 '/lesson.LessonService/DeleteLesson',
-                request_serializer=base__pb2.IdRequest.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                request_serializer=lesson__pb2.IdRequest.SerializeToString,
+                response_deserializer=lesson__pb2.BaseResponse.FromString,
                 _registered_method=True)
 
 
@@ -86,8 +85,7 @@ class LessonServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetAllLessons(self, request, context):
-        """New method
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -131,17 +129,17 @@ def add_LessonServiceServicer_to_server(servicer, server):
             'CreateLesson': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateLesson,
                     request_deserializer=lesson__pb2.Lesson.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    response_serializer=lesson__pb2.BaseResponse.SerializeToString,
             ),
             'UpdateLesson': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateLesson,
                     request_deserializer=lesson__pb2.Lesson.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    response_serializer=lesson__pb2.BaseResponse.SerializeToString,
             ),
             'DeleteLesson': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteLesson,
-                    request_deserializer=base__pb2.IdRequest.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    request_deserializer=lesson__pb2.IdRequest.FromString,
+                    response_serializer=lesson__pb2.BaseResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -252,7 +250,7 @@ class LessonService(object):
             target,
             '/lesson.LessonService/CreateLesson',
             lesson__pb2.Lesson.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            lesson__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -279,7 +277,7 @@ class LessonService(object):
             target,
             '/lesson.LessonService/UpdateLesson',
             lesson__pb2.Lesson.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            lesson__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -305,8 +303,8 @@ class LessonService(object):
             request,
             target,
             '/lesson.LessonService/DeleteLesson',
-            base__pb2.IdRequest.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            lesson__pb2.IdRequest.SerializeToString,
+            lesson__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,

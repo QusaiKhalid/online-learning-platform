@@ -3,8 +3,7 @@
 import grpc
 import warnings
 
-import base_pb2 as base__pb2
-import enrollment_pb2 as enrollment__pb2
+from protos.generated import enrollment_pb2 as enrollment__pb2
 from google.protobuf import empty_pb2 as google_dot_protobuf_dot_empty__pb2
 
 GRPC_GENERATED_VERSION = '1.69.0'
@@ -50,17 +49,17 @@ class EnrollmentServiceStub(object):
         self.CreateEnrollment = channel.unary_unary(
                 '/enrollment.EnrollmentService/CreateEnrollment',
                 request_serializer=enrollment__pb2.Enrollment.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                response_deserializer=enrollment__pb2.BaseResponse.FromString,
                 _registered_method=True)
         self.UpdateEnrollment = channel.unary_unary(
                 '/enrollment.EnrollmentService/UpdateEnrollment',
                 request_serializer=enrollment__pb2.Enrollment.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                response_deserializer=enrollment__pb2.BaseResponse.FromString,
                 _registered_method=True)
         self.DeleteEnrollment = channel.unary_unary(
                 '/enrollment.EnrollmentService/DeleteEnrollment',
-                request_serializer=base__pb2.IdRequest.SerializeToString,
-                response_deserializer=base__pb2.BaseResponse.FromString,
+                request_serializer=enrollment__pb2.IdRequest.SerializeToString,
+                response_deserializer=enrollment__pb2.BaseResponse.FromString,
                 _registered_method=True)
 
 
@@ -75,8 +74,7 @@ class EnrollmentServiceServicer(object):
         raise NotImplementedError('Method not implemented!')
 
     def GetAllEnrollments(self, request, context):
-        """New method
-        """
+        """Missing associated documentation comment in .proto file."""
         context.set_code(grpc.StatusCode.UNIMPLEMENTED)
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
@@ -115,17 +113,17 @@ def add_EnrollmentServiceServicer_to_server(servicer, server):
             'CreateEnrollment': grpc.unary_unary_rpc_method_handler(
                     servicer.CreateEnrollment,
                     request_deserializer=enrollment__pb2.Enrollment.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    response_serializer=enrollment__pb2.BaseResponse.SerializeToString,
             ),
             'UpdateEnrollment': grpc.unary_unary_rpc_method_handler(
                     servicer.UpdateEnrollment,
                     request_deserializer=enrollment__pb2.Enrollment.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    response_serializer=enrollment__pb2.BaseResponse.SerializeToString,
             ),
             'DeleteEnrollment': grpc.unary_unary_rpc_method_handler(
                     servicer.DeleteEnrollment,
-                    request_deserializer=base__pb2.IdRequest.FromString,
-                    response_serializer=base__pb2.BaseResponse.SerializeToString,
+                    request_deserializer=enrollment__pb2.IdRequest.FromString,
+                    response_serializer=enrollment__pb2.BaseResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -209,7 +207,7 @@ class EnrollmentService(object):
             target,
             '/enrollment.EnrollmentService/CreateEnrollment',
             enrollment__pb2.Enrollment.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            enrollment__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -236,7 +234,7 @@ class EnrollmentService(object):
             target,
             '/enrollment.EnrollmentService/UpdateEnrollment',
             enrollment__pb2.Enrollment.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            enrollment__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,
@@ -262,8 +260,8 @@ class EnrollmentService(object):
             request,
             target,
             '/enrollment.EnrollmentService/DeleteEnrollment',
-            base__pb2.IdRequest.SerializeToString,
-            base__pb2.BaseResponse.FromString,
+            enrollment__pb2.IdRequest.SerializeToString,
+            enrollment__pb2.BaseResponse.FromString,
             options,
             channel_credentials,
             insecure,

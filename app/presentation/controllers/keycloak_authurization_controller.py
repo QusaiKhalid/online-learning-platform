@@ -11,7 +11,7 @@ login_model = auth_ns.model('Login', {
 })
 
 # Register the namespace
-def register_routes(api):
+def keycloak_authurization_controller(api):
     api.add_namespace(auth_ns)
 
 @auth_ns.route('/login')
