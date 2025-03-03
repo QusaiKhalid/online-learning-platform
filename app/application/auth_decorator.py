@@ -1,4 +1,6 @@
 from functools import wraps
+from flask import current_app  # Import Flask's current_app
+import grpc
 from app.infrastructure.keycloak_auth import keycloak_openid  # Import Keycloak client
 
 def authenticate_grpc_method(func):
@@ -17,10 +19,10 @@ def authenticate_grpc_method(func):
                 context.set_details("Authorization token is missing")
                 return None
 
-            # Validate token
+            # Validate token using the Flask app's configuration
             token_info = keycloak_openid.decode_token(
                 token,
-                key=self.app.config["KEYCLOAK_PUBLIC_KEY"],  # Optional: Use Keycloak's public key
+                key=current_app.config["KEYCLOAK_PUBLIC_KEY"],  # Access config via current_app
                 options={"verify_signature": True, "verify_aud": True, "verify_exp": True}
             )
 

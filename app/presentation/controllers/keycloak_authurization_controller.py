@@ -1,70 +1,80 @@
 from flask import request, jsonify
+from flask_restx import Resource  # Import Resource from Flask-RESTX
 from app.infrastructure.keycloak_auth import keycloak_openid  # Import Keycloak client
 
 def register_auth_routes(api):
     """
     Register authentication-related routes with the Flask-RESTX API.
     """
-    @api.route("/auth/login", methods=["POST"])
-    def login():
-        try:
-            # Extract credentials from the request
-            data = request.get_json()
-            username = data.get("username")
-            password = data.get("password")
 
-            if not username or not password:
-                return jsonify({"error": "Username and password are required"}), 400
+    # Define a Resource class for the /auth/login endpoint
+    class Login(Resource):
+        def post(self):
+            try:
+                # Extract credentials from the request
+                data = request.get_json()
+                username = data.get("username")
+                password = data.get("password")
 
-            # Authenticate with Keycloak
-            tokens = keycloak_openid.token(username, password)
+                if not username or not password:
+                    return {"error": "Username and password are required"}, 400
 
-            # Return tokens to the client
-            return jsonify({
-                "access_token": tokens["access_token"],
-                "refresh_token": tokens["refresh_token"],
-                "expires_in": tokens["expires_in"]
-            }), 200
+                # Authenticate with Keycloak
+                tokens = keycloak_openid.token(username, password)
 
-        except Exception as e:
-            return jsonify({"error": "Invalid credentials"}), 401
+                # Return tokens to the client
+                return {
+                    "access_token": tokens["access_token"],
+                    "refresh_token": tokens["refresh_token"],
+                    "expires_in": tokens["expires_in"]
+                }, 200
 
-    @api.route("/auth/logout", methods=["POST"])
-    def logout():
-        try:
-            # Extract refresh token from the request
-            data = request.get_json()
-            refresh_token = data.get("refresh_token")
+            except Exception as e:
+                return {"error": "Invalid credentials"}, 401
 
-            if not refresh_token:
-                return jsonify({"error": "Refresh token is required"}), 400
+    # Define a Resource class for the /auth/logout endpoint
+    class Logout(Resource):
+        def post(self):
+            try:
+                # Extract refresh token from the request
+                data = request.get_json()
+                refresh_token = data.get("refresh_token")
 
-            # Revoke the token
-            keycloak_openid.logout(refresh_token)
+                if not refresh_token:
+                    return {"error": "Refresh token is required"}, 400
 
-            return jsonify({"message": "Logged out successfully"}), 200
+                # Revoke the token
+                keycloak_openid.logout(refresh_token)
 
-        except Exception as e:
-            return jsonify({"error": "Logout failed"}), 500
+                return {"message": "Logged out successfully"}, 200
 
-    @api.route("/auth/refresh-token", methods=["POST"])
-    def refresh_token():
-        try:
-            # Extract refresh token from the request
-            data = request.get_json()
-            refresh_token = data.get("refresh_token")
+            except Exception as e:
+                return {"error": "Logout failed"}, 500
 
-            if not refresh_token:
-                return jsonify({"error": "Refresh token is required"}), 400
+    # Define a Resource class for the /auth/refresh-token endpoint
+    class RefreshToken(Resource):
+        def post(self):
+            try:
+                # Extract refresh token from the request
+                data = request.get_json()
+                refresh_token = data.get("refresh_token")
 
-            # Fetch new tokens
-            tokens = keycloak_openid.refresh_token(refresh_token)
+                if not refresh_token:
+                    return {"error": "Refresh token is required"}, 400
 
-            return jsonify({
-                "access_token": tokens["access_token"],
-                "refresh_token": tokens["refresh_token"],
-                "expires_in": tokens["expires_in"]
-            }), 200
+                # Fetch new tokens
+                tokens = keycloak_openid.refresh_token(refresh_token)
 
-        except Exception as e:
-            return jsonify({"error": "Token refresh failed"}), 401
+                return {
+                    "access_token": tokens["access_token"],
+                    "refresh_token": tokens["refresh_token"],
+                    "expires_in": tokens["expires_in"]
+                }, 200
+
+            except Exception as e:
+                return {"error": "Token refresh failed"}, 401
+
+    # Register the resources with the API
+    api.add_resource(Login, "/auth/login")
+    api.add_resource(Logout, "/auth/logout")
+    api.add_resource(RefreshToken, "/auth/refresh-token")

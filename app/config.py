@@ -28,3 +28,6 @@ class Config:
 
     # Keycloak client secret
     KEYCLOAK_CLIENT_SECRET = os.getenv('KEYCLOAK_CLIENT_SECRET', 'default_keycloak_secret')
+
+    # Keycloak public key (used for token verification)
+    KEYCLOAK_PUBLIC_KEY = os.getenv('KEYCLOAK_PUBLIC_KEY', '')

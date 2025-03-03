@@ -18,7 +18,7 @@ def get_access_token(username: str, password: str) -> str:
     """
     Authenticate with Keycloak and return an access token.
     """
-    login_url = "http://localhost:50051/auth/login"  # Replace with your actual login endpoint
+    login_url = "http://localhost:5000/auth/login"  # Replace with your actual login endpoint
     payload = {
         "username": username,
         "password": password
@@ -129,8 +129,8 @@ if __name__ == "__main__":
         exit(1)
 
     # Example test cases
-    test_create_user("newuser2@example.com", "newuser2", "password123", access_token=access_token)  # Create a new user
+    # test_create_user("newuser2@example.com", "newuser2", "password123", access_token=access_token)  # Create a new user
     # test_get_user_by_id(2, access_token=access_token)  # Replace with an actual user ID
-    # test_get_user_by_email("updatedemail@example.com", access_token=access_token)  # Replace with an actual email
+    test_get_user_by_email("updatedemail@example.com", access_token=access_token)  # Replace with an actual email
     # test_update_user(2, "updatedemail1@example.com", "updatedusername1", access_token=access_token)  # Replace with actual user ID
     # test_delete_user(2, access_token=access_token)  # Replace with an actual user ID

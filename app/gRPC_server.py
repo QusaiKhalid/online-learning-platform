@@ -15,6 +15,7 @@ from protos.generated import user_pb2_grpc
 # Import concrete service implementation
 from app.application.gRPC_services.user_servise import UserService
 from app.infrastructure.repositories.user_repository import UserRepository  # Concrete implementation
+from app.application.auth_interceptor import AuthInterceptor
 
 # Configure logging
 logging.basicConfig(level=logging.INFO)
@@ -37,6 +38,13 @@ def serve():
 
         # Instantiate UserService with the concrete repository
         user_service = UserService(user_repository)
+
+        # # Add the interceptor
+        # auth_interceptor = AuthInterceptor()
+        # server = grpc.server(
+        #     futures.ThreadPoolExecutor(max_workers=10),
+        #     interceptors=(auth_interceptor,)
+        # )
 
         # Add the service to the server
         user_pb2_grpc.add_UserServiceServicer_to_server(user_service, server)
