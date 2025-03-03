@@ -4,12 +4,14 @@ from app.domain.interfaces.repositories.Iuser_repository import IUserRepository
 from app.domain.models import User
 from app.application import gRPC_helpers as grpc_helpers
 import logging
-from app.application.security import hash_password 
+from app.application.security import hash_password
+from app.application.auth_decorator import authenticate_grpc_method  # Import the decorator
 
 class UserService(user_pb2_grpc.UserServiceServicer):
     def __init__(self, user_repository: IUserRepository):
         self.user_repository = user_repository
 
+    @authenticate_grpc_method
     def GetUserById(self, request, context):
         try:
             user = self.user_repository.get_by_id(request.id)
@@ -24,6 +26,7 @@ class UserService(user_pb2_grpc.UserServiceServicer):
             context.set_details("Internal server error")
             return user_pb2.GetUserResponse()
 
+    @authenticate_grpc_method
     def GetUserByEmail(self, request, context):
         try:
             user = self.user_repository.get_by_email(request.email)
@@ -38,6 +41,7 @@ class UserService(user_pb2_grpc.UserServiceServicer):
             context.set_details("Internal server error")
             return user_pb2.GetUserResponse()
 
+    @authenticate_grpc_method
     def GetUserByUsername(self, request, context):
         try:
             user = self.user_repository.get_by_username(request.username)
@@ -52,6 +56,7 @@ class UserService(user_pb2_grpc.UserServiceServicer):
             context.set_details("Internal server error")
             return user_pb2.GetUserResponse()
 
+    @authenticate_grpc_method
     def GetAllUsers(self, request, context):
         try:
             users = self.user_repository.get_all()
@@ -65,6 +70,7 @@ class UserService(user_pb2_grpc.UserServiceServicer):
             context.set_details("Internal server error")
             return user_pb2.GetAllUsersResponse()
 
+    @authenticate_grpc_method
     def CreateUser(self, request, context):
         try:
             # Validate email format
@@ -93,6 +99,7 @@ class UserService(user_pb2_grpc.UserServiceServicer):
             context.set_details("Internal server error")
             return user_pb2.BaseResponse(success=False, message="Internal server error")
 
+    @authenticate_grpc_method
     def UpdateUser(self, request, context):
         try:
             # Fetch the existing user
@@ -122,7 +129,8 @@ class UserService(user_pb2_grpc.UserServiceServicer):
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details("Internal server error")
             return user_pb2.BaseResponse(success=False, message="Internal server error")
-        
+
+    @authenticate_grpc_method
     def DeleteUser(self, request, context):
         try:
             # Attempt to soft-delete the user
