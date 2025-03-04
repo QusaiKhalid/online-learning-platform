@@ -12,4 +12,4 @@ class LessonRepository(BaseRepository[Lesson], ILessonRepository):
 
     def get_by_course(self, course_id: int) -> List[Lesson]:
         """Fetch all lessons belonging to a specific course."""
-        return self.db_session.query(Lesson).filter(Lesson.course_id == course_id).all()
+        return self.db_session.query(Lesson).filter(Lesson.course_id == course_id, Lesson.is_deleted==False).all()

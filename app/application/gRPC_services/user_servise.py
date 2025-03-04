@@ -4,20 +4,30 @@ from app.domain.interfaces.repositories.Iuser_repository import IUserRepository
 from app.domain.models import User
 from app.application import gRPC_helpers as grpc_helpers
 import logging
-from app.application.security import hash_password 
+from app.application.security import hash_password, authenticate, AuthenticationError  # Import updated authenticate function
 
 class UserService(user_pb2_grpc.UserServiceServicer):
     def __init__(self, user_repository: IUserRepository):
         self.user_repository = user_repository
 
+    def _handle_authentication_error(self, error: AuthenticationError, context):
+        """Helper method to handle AuthenticationError exceptions."""
+        context.set_code(error.code)
+        context.set_details(error.details)
+        return user_pb2.GetUserResponse()  # Return an empty response or appropriate default
+
     def GetUserById(self, request, context):
         try:
+            # Authenticate and authorize (admin, teacher, or student can access)
+            token_info = authenticate(context, required_roles=['admin', 'teacher', 'student'])
             user = self.user_repository.get_by_id(request.id)
             if not user:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details("User not found")
                 return user_pb2.GetUserResponse()
             return grpc_helpers.user_to_proto(user)
+        except AuthenticationError as e:
+            return self._handle_authentication_error(e, context)
         except Exception as e:
             logging.error(f"Error fetching user by ID: {str(e)}")
             context.set_code(grpc.StatusCode.INTERNAL)
@@ -26,12 +36,16 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def GetUserByEmail(self, request, context):
         try:
+            # Authenticate and authorize (admin, teacher, or student can access)
+            token_info = authenticate(context, required_roles=['admin', 'teacher', 'student'])
             user = self.user_repository.get_by_email(request.email)
             if not user:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details("User not found")
                 return user_pb2.GetUserResponse()
             return grpc_helpers.user_to_proto(user)
+        except AuthenticationError as e:
+            return self._handle_authentication_error(e, context)
         except Exception as e:
             logging.error(f"Error fetching user by email: {str(e)}")
             context.set_code(grpc.StatusCode.INTERNAL)
@@ -40,12 +54,16 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def GetUserByUsername(self, request, context):
         try:
+            # Authenticate and authorize (admin, teacher, or student can access)
+            token_info = authenticate(context, required_roles=['admin', 'teacher', 'student'])
             user = self.user_repository.get_by_username(request.username)
             if not user:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details("User not found")
                 return user_pb2.GetUserResponse()
             return grpc_helpers.user_to_proto(user)
+        except AuthenticationError as e:
+            return self._handle_authentication_error(e, context)
         except Exception as e:
             logging.error(f"Error fetching user by username: {str(e)}")
             context.set_code(grpc.StatusCode.INTERNAL)
@@ -54,11 +72,20 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def GetAllUsers(self, request, context):
         try:
+            logging.info("GetAllUsers method invoked.")
+            
+            # Authenticate and authorize (only admins can fetch all users)
+            token_info = authenticate(context, required_roles=['admin'])
+            logging.info("Authentication successful. Fetching all users...")
+            
             users = self.user_repository.get_all()
             response = user_pb2.GetAllUsersResponse()
             for user in users:
                 response.users.append(grpc_helpers.user_to_proto(user))
             return response
+        except AuthenticationError as e:
+            logging.error(f"Authentication failed: {e.details}")
+            return self._handle_authentication_error(e, context)
         except Exception as e:
             logging.error(f"Error fetching all users: {str(e)}")
             context.set_code(grpc.StatusCode.INTERNAL)
@@ -67,6 +94,9 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def CreateUser(self, request, context):
         try:
+            # Authenticate (only admins can create users)
+            token_info = authenticate(context, required_roles=['admin'])
+
             # Validate email format
             if not self._validate_email(request.email):
                 context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
@@ -76,8 +106,14 @@ class UserService(user_pb2_grpc.UserServiceServicer):
             # Hash password before saving
             hashed_password = hash_password(request.password)
 
-            # Determine the role (use "student" as the default if not provided)
+            # Determine the role (default to "student" if not provided)
             role = request.role if request.role else "student"
+
+            # Ensure the role is valid
+            if role not in ['admin', 'teacher', 'student']:
+                context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
+                context.set_details("Invalid role specified")
+                return user_pb2.BaseResponse(success=False, message="Invalid role")
 
             new_user = User(
                 email=request.email,
@@ -87,6 +123,8 @@ class UserService(user_pb2_grpc.UserServiceServicer):
             )
             created_user = self.user_repository.create(new_user)
             return grpc_helpers.success_response(f"User {created_user.id} created successfully")
+        except AuthenticationError as e:
+            return self._handle_authentication_error(e, context)
         except Exception as e:
             logging.error(f"Error creating user: {str(e)}")
             context.set_code(grpc.StatusCode.INTERNAL)
@@ -95,12 +133,24 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def UpdateUser(self, request, context):
         try:
+            # Authenticate (admin, teacher, or student can update their own profile)
+            token_info = authenticate(context, required_roles=['admin', 'teacher', 'student'])
+            user_roles = token_info.get('realm_access', {}).get('roles', [])
+
             # Fetch the existing user
             existing_user = self.user_repository.get_by_id(request.id)
             if not existing_user:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details("User not found")
                 return user_pb2.BaseResponse(success=False, message="User not found")
+
+            # If not admin, check if the user is updating themselves
+            if 'admin' not in user_roles:
+                token_username = token_info.get('preferred_username')
+                if existing_user.username != token_username:
+                    context.set_code(grpc.StatusCode.PERMISSION_DENIED)
+                    context.set_details("Cannot update other users")
+                    return user_pb2.BaseResponse(success=False, message="Permission denied")
 
             # Prepare the data to update
             entity_data = {}
@@ -117,14 +167,19 @@ class UserService(user_pb2_grpc.UserServiceServicer):
                 return user_pb2.BaseResponse(success=False, message="User not found")
 
             return grpc_helpers.success_response(f"User {request.id} updated successfully")
+        except AuthenticationError as e:
+            return self._handle_authentication_error(e, context)
         except Exception as e:
             logging.error(f"Error updating user: {str(e)}")
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details("Internal server error")
             return user_pb2.BaseResponse(success=False, message="Internal server error")
-        
+
     def DeleteUser(self, request, context):
         try:
+            # Authenticate and authorize (only admins can delete users)
+            token_info = authenticate(context, required_roles=['admin'])
+
             # Attempt to soft-delete the user
             deleted = self.user_repository.delete(request.id)
             if not deleted:
@@ -132,6 +187,8 @@ class UserService(user_pb2_grpc.UserServiceServicer):
                 context.set_details("User not found")
                 return user_pb2.BaseResponse(success=False, message="User not found")
             return grpc_helpers.success_response(f"User {request.id} deleted successfully")
+        except AuthenticationError as e:
+            return self._handle_authentication_error(e, context)
         except Exception as e:
             logging.error(f"Error deleting user: {str(e)}")
             context.set_code(grpc.StatusCode.INTERNAL)

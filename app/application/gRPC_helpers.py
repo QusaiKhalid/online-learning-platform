@@ -7,6 +7,7 @@ def user_to_proto(user):
         id=user.id,
         email=user.email,
         username=user.username,
+        role=user.role,
         message="User retrieved successfully"
     )
 

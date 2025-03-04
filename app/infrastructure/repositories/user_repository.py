@@ -12,8 +12,8 @@ class UserRepository(BaseRepository[User], IUserRepository):
 
     def get_by_email(self, email: str) -> Optional[User]:
         """Fetch a user by email."""
-        return self.db_session.query(User).filter(User.email == email).first()
+        return self.db_session.query(User).filter(User.email == email, User.is_deleted == False).first()
 
     def get_by_username(self, username: str) -> Optional[User]:
         """Fetch a user by username."""
-        return self.db_session.query(User).filter(User.username == username).first()
+        return self.db_session.query(User).filter(User.username == username, User.is_deleted == False).first()

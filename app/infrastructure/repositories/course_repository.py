@@ -12,4 +12,4 @@ class CourseRepository(BaseRepository[Course], ICourseRepository):
 
     def get_by_instructor(self, instructor_id: int) -> List[Course]:
         """Fetch all courses assigned to a specific instructor."""
-        return self.db_session.query(Course).filter(Course.instructor_id == instructor_id).all()
+        return self.db_session.query(Course).filter(Course.instructor_id == instructor_id, Course.is_deleted==False).all()
