@@ -16,7 +16,6 @@ def decode_and_validate_token(token):
     try:
         token_info = keycloak_openid.decode_token(
             token,
-            key=Config.KEYCLOAK_PUBLIC_KEY,  # Optional: Use Keycloak's public key
             options={"verify_signature": True, "verify_aud": True, "verify_exp": True}
         )
         return token_info

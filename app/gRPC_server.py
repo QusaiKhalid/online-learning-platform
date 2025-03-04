@@ -7,31 +7,51 @@ from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
 # Add the project root directory to the Python path
-sys.path.append(os.path.abspath(os.path.join(os.path.dirname(__file__), '..')))
+PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
+sys.path.append(PROJECT_ROOT)
 
 # Import the generated gRPC code
+from app.config import Config
 from protos.generated import user_pb2_grpc
+from protos.generated import auth_pb2_grpc
 
 # Import concrete service implementation
 from app.application.gRPC_services.user_servise import UserService
+from app.application.gRPC_services.auth_service import AuthServicer
+
 from app.infrastructure.repositories.user_repository import UserRepository  # Concrete implementation
-from app.application.auth_interceptor import AuthInterceptor
 
 # Configure logging
-logging.basicConfig(level=logging.INFO)
+logging.basicConfig(level=logging.DEBUG)
+
+# Debugging: Log the environment variable and constructed database URL
+# Use the database URL from the Config class
+DATABASE_URL = "sqlite:///C:/Internship/1st Task/online-learning-platform/instance/app.db"
+logging.debug(f"Using DATABASE_URL: {DATABASE_URL}")
+
+# Ensure the directory exists
+if not os.path.exists('instance'):
+    os.makedirs('instance')
+    logging.debug("Created 'instance' directory.")
+
+
 
 # Database setup (SQLAlchemy)
-DATABASE_URL = os.getenv('DATABASE_URL', 'sqlite:///app.db')  
-engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
-SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+try:
+    engine = create_engine(DATABASE_URL, connect_args={"check_same_thread": False})
+    SessionLocal = sessionmaker(autocommit=False, autoflush=False, bind=engine)
+    logging.debug("Database engine created successfully.")
+except Exception as e:
+    logging.error(f"Error creating database engine: {str(e)}")
 
 def serve():
     try:
         # Create a gRPC server with a thread pool executor
         server = grpc.server(futures.ThreadPoolExecutor(max_workers=10))
 
-        # Create a database session
+        # Debugging: Log the creation of a session
         db_session = SessionLocal()
+        logging.debug("Created new database session.")
 
         # Create a concrete instance of the UserRepository
         user_repository = UserRepository(db_session=db_session)
@@ -39,15 +59,12 @@ def serve():
         # Instantiate UserService with the concrete repository
         user_service = UserService(user_repository)
 
-        # # Add the interceptor
-        # auth_interceptor = AuthInterceptor()
-        # server = grpc.server(
-        #     futures.ThreadPoolExecutor(max_workers=10),
-        #     interceptors=(auth_interceptor,)
-        # )
-
         # Add the service to the server
         user_pb2_grpc.add_UserServiceServicer_to_server(user_service, server)
+
+        # Add Auth Service
+        auth_service = AuthServicer()
+        auth_pb2_grpc.add_AuthServiceServicer_to_server(auth_service, server)
 
         # Specify the address and port to listen on
         server.add_insecure_port('[::]:50051')  # Listens on all interfaces on port 50051
@@ -62,4 +79,5 @@ def serve():
         logging.error(f"Error starting the server: {str(e)}")
 
 if __name__ == '__main__':
+    logging.debug("Starting server...")
     serve()  # Call the serve function to start the server

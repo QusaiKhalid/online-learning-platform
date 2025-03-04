@@ -12,7 +12,7 @@ class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
 
     # Database connection string
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///app.db')
+    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///instance/app.db')
 
     # Disable SQLAlchemy event system to reduce overhead
     SQLALCHEMY_TRACK_MODIFICATIONS = False

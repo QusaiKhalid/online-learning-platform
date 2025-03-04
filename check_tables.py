@@ -7,6 +7,7 @@ DATABASE_URL = 'sqlite:///instance/app.db'
   # Replace with actual URL if necessary
 engine = create_engine(DATABASE_URL)
 
+print(f"Database file used by script: {os.path.abspath('instance/app.db')}")
 
 # Create an inspector to inspect the database
 inspector = inspect(engine)
