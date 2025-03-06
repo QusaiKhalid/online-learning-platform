@@ -3,9 +3,7 @@ import requests
 import grpc
 from app.infrastructure.keycloak_auth import keycloak_openid
 import bcrypt
-from cryptography.hazmat.primitives import serialization
-from cryptography.hazmat.primitives.asymmetric import rsa
-from cryptography.hazmat.backends import default_backend
+import json
 import base64
 from datetime import datetime, timezone
 
@@ -31,51 +29,6 @@ class AuthenticationError(Exception):
         self.code = code
         self.details = details
 
-def get_keycloak_public_key(token_kid: str):
-    """
-    Fetch the Keycloak public key for the given key ID (kid) from the JWKS endpoint.
-    """
-    try:
-        logger.info(f"Fetching Keycloak public key for kid: {token_kid}")
-        openid_config_url = "http://localhost:8080/realms/online-learning-platform/.well-known/openid-configuration"
-        openid_config_response = requests.get(openid_config_url)
-        openid_config_response.raise_for_status()
-        openid_config = openid_config_response.json()
-
-        logger.info("OpenID configuration retrieved successfully")
-        jwks_uri = openid_config["jwks_uri"]
-        jwks_response = requests.get(jwks_uri)
-        jwks_response.raise_for_status()
-        jwks = jwks_response.json()
-
-        logger.info("JWKS retrieved successfully")
-        # Find the key with the matching kid
-        for key_data in jwks["keys"]:
-            if key_data.get("kid") == token_kid:
-                logger.info(f"Found matching key for kid: {token_kid}")
-                # Decode the JWK RSA public key
-                public_key = rsa.RSAPublicNumbers(
-                    e=int.from_bytes(base64.urlsafe_b64decode(key_data["e"] + "==="), "big"),
-                    n=int.from_bytes(base64.urlsafe_b64decode(key_data["n"] + "==="), "big"),
-                ).public_key(default_backend())
-
-                # Convert the key to PEM format
-                pem_public_key = public_key.public_bytes(
-                    encoding=serialization.Encoding.PEM,
-                    format=serialization.PublicFormat.SubjectPublicKeyInfo
-                ).decode("utf-8")
-
-                logger.info(f"Public key in PEM format: {pem_public_key}")
-                return pem_public_key
-
-        logger.error("No matching public key found for the given token")
-        raise AuthenticationError(grpc.StatusCode.INTERNAL, "No matching public key found for the given token")
-
-    except Exception as e:
-        logger.error(f"Failed to fetch Keycloak public key: {str(e)}")
-        raise AuthenticationError(grpc.StatusCode.INTERNAL, "Failed to fetch Keycloak public key")
-import json
-
 def validate_token(token: str):
     """
     Validate the JWT token (expiration, issuer, audience, and signature).
@@ -92,10 +45,6 @@ def validate_token(token: str):
             logger.error("Token header missing key ID (kid)")
             raise AuthenticationError(grpc.StatusCode.UNAUTHENTICATED, "Token header missing key ID (kid)")
 
-        # Fetch the public key for the token's kid
-        public_key = get_keycloak_public_key(token_kid)
-
-        logger.info("Public key retrieved successfully")
         # Decode and validate the token
         token_info = keycloak_openid.decode_token(token)
 
@@ -110,9 +59,9 @@ def validate_token(token: str):
             logger.error("Invalid token issuer")
             raise AuthenticationError(grpc.StatusCode.UNAUTHENTICATED, "Invalid token issuer")
 
-        if "your-audience" not in token_info.get("aud", []):  # Replace with your actual audience
-            logger.error("Invalid token audience")
-            raise AuthenticationError(grpc.StatusCode.UNAUTHENTICATED, "Invalid token audience")
+        # if "your-audience" not in token_info.get("aud", []):  # Replace with your actual audience
+        #     logger.error("Invalid token audience")
+        #     raise AuthenticationError(grpc.StatusCode.UNAUTHENTICATED, "Invalid token audience")
 
         logger.info("Token validation successful")
         return token_info
@@ -159,6 +108,8 @@ def authorize_with_opa(context, action, resource_type, resource_id=None):
     Perform OPA authorization for the given action and resource.
     """
     try:
+        logger.info(f"Action: {action}, Resource type: {resource_type}, Resource ID: {resource_id}")
+
         logger.info("Authorizing with OPA")
         # Authenticate the user and retrieve their roles
         token_info = authenticate(context)
@@ -168,13 +119,11 @@ def authorize_with_opa(context, action, resource_type, resource_id=None):
             "username": token_info.get("preferred_username"),
             "roles": user_roles
         }
-
         logger.info(f"User info: {user_info}")
         # Validate resource ID to prevent injection attacks
         if resource_id and not isinstance(resource_id, str):
             logger.error("Invalid resource ID")
             raise AuthenticationError(grpc.StatusCode.INVALID_ARGUMENT, "Invalid resource ID")
-
         # Call OPA for authorization
         opa_url = "http://localhost:8181/v1/data/authz/allow"
         input_data = {
@@ -183,7 +132,7 @@ def authorize_with_opa(context, action, resource_type, resource_id=None):
                 "action": action,
                 "resource": {
                     "type": resource_type,
-                    "id": resource_id or token_info.get("sub")  # Default to user's ID if not specified
+                    "id": resource_id   # Default to user's ID if not specified
                 }
             }
         }

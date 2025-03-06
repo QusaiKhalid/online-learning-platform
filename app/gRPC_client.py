@@ -160,7 +160,7 @@ def test_get_all_users(access_token):
 if __name__ == "__main__":
     # Authenticate and obtain an access token using gRPC AuthService
     try:
-        username = "hello"  # Replace with a valid username
+        username = "qusai"  # Replace with a valid username
         password = "123"  # Replace with a valid password
         access_token = get_access_token(username, password)
         print(f"Access token obtained successfully: {access_token[:20]}...")  # Print a truncated token
@@ -170,8 +170,8 @@ if __name__ == "__main__":
 
     # Example test cases
     # test_create_user("newuser3@example.com", "newuser3", "password123", access_token=access_token)  # Create a new user
-    # test_get_user_by_id(5, access_token=access_token)  # Replace with an actual user ID
+    test_get_user_by_id(9, access_token=access_token)  # Replace with an actual user ID
     # test_get_user_by_email("newuser7@example.com", access_token=access_token)  # Replace with an actual email
     # test_update_user(2, "updatedemail1@example.com", "updatedusername1", access_token=access_token)  # Replace with actual user ID
     # test_delete_user(2, access_token=access_token)  # Replace with an actual user ID
-    test_get_all_users(access_token)  # Fetch all users
+    # test_get_all_users(access_token)  # Fetch all users

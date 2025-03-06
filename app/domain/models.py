@@ -13,15 +13,19 @@ from sqlalchemy import (
 )
 from sqlalchemy.orm import relationship
 from ..extensions import db
+from sqlalchemy import Column, BigInteger, String, Boolean, Enum
+from sqlalchemy.orm import relationship
+
 # Define the Users table
 class User(db.Model):
     __tablename__ = "users"
 
-    id = Column(BigInteger, primary_key=True, autoincrement=True)
+    id = Column(BigInteger, primary_key=True, autoincrement=True)  # Internal database ID
+    keycloak_id = Column(String(36), unique=True, nullable=True)  # Keycloak user ID (UUID format)
     username = Column(String(255), unique=True, nullable=False)
     email = Column(String(255), unique=True, nullable=False)
     hashed_password = Column(String(255), nullable=False)
-    role = Column(Enum("student", "instructor", "admin", name="user_role"), nullable=False)
+    role = Column(Enum("student", "instructor", "admin", "teacher", name="user_role"), nullable=False)
     is_deleted = Column(Boolean, default=False, nullable=False)  # Soft delete flag
 
     # Relationships

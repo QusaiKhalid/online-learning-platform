@@ -2,7 +2,7 @@ import logging
 from concurrent import futures
 import grpc
 from protos.generated.auth_pb2 import LoginResponse, LogoutResponse, RefreshTokenResponse
-from protos.generated.auth_pb2_grpc import AuthServiceServicer, add_AuthServiceServicer_to_server
+from protos.generated.auth_pb2_grpc import AuthServiceServicer
 from app.infrastructure.keycloak_auth import keycloak_openid  # Import Keycloak client
 
 # Configure logging

@@ -4,7 +4,7 @@ from app.domain.interfaces.repositories.Iuser_repository import IUserRepository
 from app.domain.models import User
 from app.application import gRPC_helpers as grpc_helpers
 import logging
-from app.application.security import hash_password, authenticate, AuthenticationError  # Import updated authenticate function
+from app.application.security import hash_password, validate_email, authorize_with_opa, AuthenticationError  # Updated import
 
 class UserService(user_pb2_grpc.UserServiceServicer):
     def __init__(self, user_repository: IUserRepository):
@@ -18,14 +18,22 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def GetUserById(self, request, context):
         try:
-            # Authenticate and authorize (admin, teacher, or student can access)
-            token_info = authenticate(context, required_roles=['admin', 'teacher', 'student'])
+            # Fetch the user from the database using the provided database ID
             user = self.user_repository.get_by_id(request.id)
             if not user:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details("User not found")
                 return user_pb2.GetUserResponse()
+
+            # Extract the Keycloak ID from the fetched user
+            keycloak_id = user.keycloak_id
+
+            # Authorize using the Keycloak ID as the resource ID
+            authorize_with_opa(context, action="read", resource_type="user", resource_id=keycloak_id)
+
+            # Return the user details
             return grpc_helpers.user_to_proto(user)
+
         except AuthenticationError as e:
             return self._handle_authentication_error(e, context)
         except Exception as e:
@@ -36,14 +44,22 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def GetUserByEmail(self, request, context):
         try:
-            # Authenticate and authorize (admin, teacher, or student can access)
-            token_info = authenticate(context, required_roles=['admin', 'teacher', 'student'])
+            # Fetch the user from the database using the provided email
             user = self.user_repository.get_by_email(request.email)
             if not user:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details("User not found")
                 return user_pb2.GetUserResponse()
+
+            # Extract the Keycloak ID from the fetched user
+            keycloak_id = user.keycloak_id
+
+            # Authorize using the Keycloak ID as the resource ID
+            authorize_with_opa(context, action="read", resource_type="user", resource_id=keycloak_id)
+
+            # Return the user details
             return grpc_helpers.user_to_proto(user)
+
         except AuthenticationError as e:
             return self._handle_authentication_error(e, context)
         except Exception as e:
@@ -54,14 +70,22 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def GetUserByUsername(self, request, context):
         try:
-            # Authenticate and authorize (admin, teacher, or student can access)
-            token_info = authenticate(context, required_roles=['admin', 'teacher', 'student'])
+            # Fetch the user from the database using the provided username
             user = self.user_repository.get_by_username(request.username)
             if not user:
                 context.set_code(grpc.StatusCode.NOT_FOUND)
                 context.set_details("User not found")
                 return user_pb2.GetUserResponse()
+
+            # Extract the Keycloak ID from the fetched user
+            keycloak_id = user.keycloak_id
+
+            # Authorize using the Keycloak ID as the resource ID
+            authorize_with_opa(context, action="read", resource_type="user", resource_id=keycloak_id)
+
+            # Return the user details
             return grpc_helpers.user_to_proto(user)
+
         except AuthenticationError as e:
             return self._handle_authentication_error(e, context)
         except Exception as e:
@@ -73,16 +97,17 @@ class UserService(user_pb2_grpc.UserServiceServicer):
     def GetAllUsers(self, request, context):
         try:
             logging.info("GetAllUsers method invoked.")
-            
-            # Authenticate and authorize (only admins can fetch all users)
-            token_info = authenticate(context, required_roles=['admin'])
+
+            # Authenticate and authorize using authorize_with_opa (only admins can fetch all users)
+            authorize_with_opa(context, action="read", resource_type="users")
             logging.info("Authentication successful. Fetching all users...")
-            
+
             users = self.user_repository.get_all()
             response = user_pb2.GetAllUsersResponse()
             for user in users:
                 response.users.append(grpc_helpers.user_to_proto(user))
             return response
+
         except AuthenticationError as e:
             logging.error(f"Authentication failed: {e.details}")
             return self._handle_authentication_error(e, context)
@@ -94,11 +119,11 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def CreateUser(self, request, context):
         try:
-            # Authenticate (only admins can create users)
-            token_info = authenticate(context, required_roles=['admin'])
+            # Authenticate using authorize_with_opa (only admins can create users)
+            authorize_with_opa(context, action="create", resource_type="user")
 
             # Validate email format
-            if not self._validate_email(request.email):
+            if not validate_email(request.email):
                 context.set_code(grpc.StatusCode.INVALID_ARGUMENT)
                 context.set_details("Invalid email format")
                 return user_pb2.BaseResponse(success=False, message="Invalid email format")
@@ -123,6 +148,7 @@ class UserService(user_pb2_grpc.UserServiceServicer):
             )
             created_user = self.user_repository.create(new_user)
             return grpc_helpers.success_response(f"User {created_user.id} created successfully")
+
         except AuthenticationError as e:
             return self._handle_authentication_error(e, context)
         except Exception as e:
@@ -133,10 +159,6 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def UpdateUser(self, request, context):
         try:
-            # Authenticate (admin, teacher, or student can update their own profile)
-            token_info = authenticate(context, required_roles=['admin', 'teacher', 'student'])
-            user_roles = token_info.get('realm_access', {}).get('roles', [])
-
             # Fetch the existing user
             existing_user = self.user_repository.get_by_id(request.id)
             if not existing_user:
@@ -144,13 +166,11 @@ class UserService(user_pb2_grpc.UserServiceServicer):
                 context.set_details("User not found")
                 return user_pb2.BaseResponse(success=False, message="User not found")
 
-            # If not admin, check if the user is updating themselves
-            if 'admin' not in user_roles:
-                token_username = token_info.get('preferred_username')
-                if existing_user.username != token_username:
-                    context.set_code(grpc.StatusCode.PERMISSION_DENIED)
-                    context.set_details("Cannot update other users")
-                    return user_pb2.BaseResponse(success=False, message="Permission denied")
+            # Extract the Keycloak ID from the fetched user
+            keycloak_id = existing_user.keycloak_id
+
+            # Authorize using the Keycloak ID as the resource ID
+            authorize_with_opa(context, action="update", resource_type="user", resource_id=keycloak_id)
 
             # Prepare the data to update
             entity_data = {}
@@ -167,6 +187,7 @@ class UserService(user_pb2_grpc.UserServiceServicer):
                 return user_pb2.BaseResponse(success=False, message="User not found")
 
             return grpc_helpers.success_response(f"User {request.id} updated successfully")
+
         except AuthenticationError as e:
             return self._handle_authentication_error(e, context)
         except Exception as e:
@@ -177,8 +198,18 @@ class UserService(user_pb2_grpc.UserServiceServicer):
 
     def DeleteUser(self, request, context):
         try:
-            # Authenticate and authorize (only admins can delete users)
-            token_info = authenticate(context, required_roles=['admin'])
+            # Fetch the existing user
+            existing_user = self.user_repository.get_by_id(request.id)
+            if not existing_user:
+                context.set_code(grpc.StatusCode.NOT_FOUND)
+                context.set_details("User not found")
+                return user_pb2.BaseResponse(success=False, message="User not found")
+
+            # Extract the Keycloak ID from the fetched user
+            keycloak_id = existing_user.keycloak_id
+
+            # Authorize using the Keycloak ID as the resource ID
+            authorize_with_opa(context, action="delete", resource_type="user", resource_id=keycloak_id)
 
             # Attempt to soft-delete the user
             deleted = self.user_repository.delete(request.id)
@@ -187,6 +218,7 @@ class UserService(user_pb2_grpc.UserServiceServicer):
                 context.set_details("User not found")
                 return user_pb2.BaseResponse(success=False, message="User not found")
             return grpc_helpers.success_response(f"User {request.id} deleted successfully")
+
         except AuthenticationError as e:
             return self._handle_authentication_error(e, context)
         except Exception as e:
@@ -194,9 +226,3 @@ class UserService(user_pb2_grpc.UserServiceServicer):
             context.set_code(grpc.StatusCode.INTERNAL)
             context.set_details("Internal server error")
             return user_pb2.BaseResponse(success=False, message="Internal server error")
-
-    # Email validation
-    def _validate_email(self, email):
-        import re
-        pattern = r'^[a-zA-Z0-9_.+-]+@[a-zA-Z0-9-]+\.[a-zA-Z0-9-.]+$'
-        return re.match(pattern, email) is not None

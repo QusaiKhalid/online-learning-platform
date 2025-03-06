@@ -11,7 +11,6 @@ PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(PROJECT_ROOT)
 
 # Import the generated gRPC code
-from app.config import Config
 from protos.generated import user_pb2_grpc
 from protos.generated import auth_pb2_grpc
 
@@ -28,13 +27,6 @@ logging.basicConfig(level=logging.DEBUG)
 # Use the database URL from the Config class
 DATABASE_URL = "sqlite:///C:/Internship/1st Task/online-learning-platform/instance/app.db"
 logging.debug(f"Using DATABASE_URL: {DATABASE_URL}")
-
-# Ensure the directory exists
-if not os.path.exists('instance'):
-    os.makedirs('instance')
-    logging.debug("Created 'instance' directory.")
-
-
 
 # Database setup (SQLAlchemy)
 try:
