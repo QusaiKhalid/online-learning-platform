@@ -1,0 +1,35 @@
+version: "3.8"
+
+services:
+  flask_app:
+    build: .
+    ports:
+      - "5000:5000"
+      - "50051:50051"
+    volumes:
+      - .:/app
+    depends_on:
+      - opa
+      - keycloak
+
+  opa:
+    image: openpolicyagent/opa
+    ports:
+      - "8181:8181"
+    command: ["run", "--server", "--addr", ":8181"]
+    volumes:
+      - ./app/infrastructure/opa_authz.rego:/policies/opa_authz.rego
+
+  keycloak:
+    image: quay.io/keycloak/keycloak
+    ports:
+      - "8080:8080"
+      - "8443:8443"
+    environment:
+      KEYCLOAK_USER: admin
+      KEYCLOAK_PASSWORD: admin
+    volumes:
+      - keycloak_data:/opt/keycloak/data
+
+volumes:
+  keycloak_data:
