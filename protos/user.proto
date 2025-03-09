@@ -26,7 +26,7 @@ message GetUserResponse {
     string email = 2;
     string username = 3;
     string message = 4;
-    string role = 5;  // Add the role field
+    string role = 5;
 }
 
 // Response for getting all users

@@ -1,16 +1,33 @@
-version: "3.8"
-
 services:
   flask_app:
     build: .
     ports:
       - "5000:5000"
-      - "50051:50051"
     volumes:
       - .:/app
+    environment:
+      - FLASK_ENV=development
+      - KEYCLOAK_URL=http://keycloak:8080
+      - OPA_URL=http://opa:8181
     depends_on:
       - opa
       - keycloak
+      - grpc_server
+    restart: unless-stopped
+
+  grpc_server:
+    build: .
+    ports:
+      - "50051:50051"
+    volumes:
+      - .:/app
+    command: ["python", "app/gRPC_server.py"]
+    environment:
+      - FLASK_ENV=development
+    depends_on:
+      - opa
+      - keycloak
+    restart: unless-stopped
 
   opa:
     image: openpolicyagent/opa
@@ -19,6 +36,7 @@ services:
     command: ["run", "--server", "--addr", ":8181"]
     volumes:
       - ./app/infrastructure/opa_authz.rego:/policies/opa_authz.rego
+    restart: unless-stopped
 
   keycloak:
     image: quay.io/keycloak/keycloak
@@ -26,10 +44,22 @@ services:
       - "8080:8080"
       - "8443:8443"
     environment:
-      KEYCLOAK_USER: admin
-      KEYCLOAK_PASSWORD: admin
+      KC_LOG_LEVEL: info
+      KC_HOSTNAME: localhost
+      KC_HOSTNAME_PORT: 8080
+      KEYCLOAK_ADMIN: admin
+      KEYCLOAK_ADMIN_PASSWORD: admin
+      KC_HOSTNAME_STRICT_HTTPS: "false" # Disable strict HTTPS for development
+      KC_HEALTH_ENABLED: "true"
+    healthcheck:
+      test: ["CMD", "curl", "-f", "http://localhost:8080/health/ready"]
+      interval: 15s
+      timeout: 2s
+      retries: 15
     volumes:
       - keycloak_data:/opt/keycloak/data
+    command: ["start-dev"] # Correctly indented under keycloak
+    restart: unless-stopped # Correctly indented under keycloak
 
 volumes:
   keycloak_data:
