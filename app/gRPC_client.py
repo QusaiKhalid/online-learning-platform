@@ -35,6 +35,30 @@ def get_access_token(username: str, password: str) -> str:
         print(f"gRPC error during authentication: {e.code()} - {e.details()}")
         raise Exception(f"Failed to authenticate: {e.details()}")
 
+# Function to test SignUp
+def test_sign_up(username: str, email: str, password: str, first_name: str, last_name: str, role: str):
+    """
+    Test the SignUp method of the AuthService.
+    """
+    try:
+        # Create the SignUpRequest
+        request = auth_pb2.SignUpRequest(
+            username=username,
+            email=email,
+            password=password,
+            first_name=first_name,
+            last_name=last_name,
+            role=role
+        )
+
+        # Call the SignUp method on the AuthService stub
+        response = auth_stub.SignUp(request)
+
+        # Print the response
+        print(f"SignUp response: {response.message}")
+    except grpc.RpcError as e:
+        print(f"gRPC error during SignUp: {e.code()} - {e.details()}")
+
 # Example: Test GetUserById
 def test_get_user_by_id(user_id, access_token):
     try:
@@ -158,20 +182,27 @@ def test_get_all_users(access_token):
         print(f"gRPC error: {e.code()} - {e.details()}")
 
 if __name__ == "__main__":
-    # Authenticate and obtain an access token using gRPC AuthService
-    try:
-        username = "qusai"  # Replace with a valid username
-        password = "123"  # Replace with a valid password
-        access_token = get_access_token(username, password)
-        print(f"Access token obtained successfully: {access_token[:20]}...")  # Print a truncated token
-    except Exception as e:
-        print(f"Authentication failed: {str(e)}")
-        exit(1)
+    # Test SignUp
+    test_sign_up(
+        username="newuser111",
+        email="newuser111@example.com",
+        password="password123",
+        first_name="New",
+        last_name="User",
+        role="student"
+    )
 
-    # Example test cases
-    # test_create_user("newuser3@example.com", "newuser3", "password123", access_token=access_token)  # Create a new user
-    test_get_user_by_id(9, access_token=access_token)  # Replace with an actual user ID
-    # test_get_user_by_email("newuser7@example.com", access_token=access_token)  # Replace with an actual email
-    # test_update_user(2, "updatedemail1@example.com", "updatedusername1", access_token=access_token)  # Replace with actual user ID
-    # test_delete_user(2, access_token=access_token)  # Replace with an actual user ID
+    # # Authenticate and obtain an access token using gRPC AuthService
+    # try:
+    #     username = "newuser"  # Replace with the newly created username
+    #     password = "password123"  # Replace with the newly created password
+    #     access_token = get_access_token(username, password)
+    #     print(f"Access token obtained successfully: {access_token[:20]}...")  # Print a truncated token
+    # except Exception as e:
+    #     print(f"Authentication failed: {str(e)}")
+    #     exit(1)
+
+    # # Example test cases
+    # test_get_user_by_id(1, access_token=access_token)  # Replace with an actual user ID
+    # test_get_user_by_email("newuser@example.com", access_token=access_token)  # Replace with an actual email
     # test_get_all_users(access_token)  # Fetch all users

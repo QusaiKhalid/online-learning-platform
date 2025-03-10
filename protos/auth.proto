@@ -6,6 +6,7 @@ service AuthService {
     rpc Login (LoginRequest) returns (LoginResponse);
     rpc Logout (LogoutRequest) returns (LogoutResponse);
     rpc RefreshToken (RefreshTokenRequest) returns (RefreshTokenResponse);
+    rpc SignUp (SignUpRequest) returns (SignUpResponse);
 }
 
 message LoginRequest {
@@ -17,10 +18,13 @@ message LoginResponse {
     string access_token = 1;
     string refresh_token = 2;
     int32 expires_in = 3;
+    string user_id = 4;  
+    string role = 5;     
 }
 
 message LogoutRequest {
     string refresh_token = 1;
+    string access_token = 2;  
 }
 
 message LogoutResponse {
@@ -35,4 +39,17 @@ message RefreshTokenResponse {
     string access_token = 1;
     string refresh_token = 2;
     int32 expires_in = 3;
+}
+
+message SignUpRequest {
+    string username = 1;
+    string email = 2;
+    string password = 3;
+    string first_name = 4;
+    string last_name = 5;
+    string role = 6;  
+}
+
+message SignUpResponse {
+    string message = 1;
 }

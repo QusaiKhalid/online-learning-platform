@@ -54,8 +54,10 @@ def serve():
         # Add the service to the server
         user_pb2_grpc.add_UserServiceServicer_to_server(user_service, server)
 
+        # Instantiate AuthService with the concrete repository
+        auth_service = AuthServicer(user_repository)
+        
         # Add Auth Service
-        auth_service = AuthServicer()
         auth_pb2_grpc.add_AuthServiceServicer_to_server(auth_service, server)
 
         # Specify the address and port to listen on

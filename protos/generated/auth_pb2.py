@@ -24,7 +24,7 @@ _sym_db = _symbol_database.Default()
 
 
 
-DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\x12\x04\x61uth\"2\n\x0cLoginRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"P\n\rLoginResponse\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x01 \x01(\t\x12\x15\n\rrefresh_token\x18\x02 \x01(\t\x12\x12\n\nexpires_in\x18\x03 \x01(\x05\"&\n\rLogoutRequest\x12\x15\n\rrefresh_token\x18\x01 \x01(\t\"!\n\x0eLogoutResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\",\n\x13RefreshTokenRequest\x12\x15\n\rrefresh_token\x18\x01 \x01(\t\"W\n\x14RefreshTokenResponse\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x01 \x01(\t\x12\x15\n\rrefresh_token\x18\x02 \x01(\t\x12\x12\n\nexpires_in\x18\x03 \x01(\x05\x32\xbb\x01\n\x0b\x41uthService\x12\x30\n\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x12\x33\n\x06Logout\x12\x13.auth.LogoutRequest\x1a\x14.auth.LogoutResponse\x12\x45\n\x0cRefreshToken\x12\x19.auth.RefreshTokenRequest\x1a\x1a.auth.RefreshTokenResponseb\x06proto3')
+DESCRIPTOR = _descriptor_pool.Default().AddSerializedFile(b'\n\nauth.proto\x12\x04\x61uth\"2\n\x0cLoginRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\x10\n\x08password\x18\x02 \x01(\t\"o\n\rLoginResponse\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x01 \x01(\t\x12\x15\n\rrefresh_token\x18\x02 \x01(\t\x12\x12\n\nexpires_in\x18\x03 \x01(\x05\x12\x0f\n\x07user_id\x18\x04 \x01(\t\x12\x0c\n\x04role\x18\x05 \x01(\t\"<\n\rLogoutRequest\x12\x15\n\rrefresh_token\x18\x01 \x01(\t\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x02 \x01(\t\"!\n\x0eLogoutResponse\x12\x0f\n\x07message\x18\x01 \x01(\t\",\n\x13RefreshTokenRequest\x12\x15\n\rrefresh_token\x18\x01 \x01(\t\"W\n\x14RefreshTokenResponse\x12\x14\n\x0c\x61\x63\x63\x65ss_token\x18\x01 \x01(\t\x12\x15\n\rrefresh_token\x18\x02 \x01(\t\x12\x12\n\nexpires_in\x18\x03 \x01(\x05\"w\n\rSignUpRequest\x12\x10\n\x08username\x18\x01 \x01(\t\x12\r\n\x05\x65mail\x18\x02 \x01(\t\x12\x10\n\x08password\x18\x03 \x01(\t\x12\x12\n\nfirst_name\x18\x04 \x01(\t\x12\x11\n\tlast_name\x18\x05 \x01(\t\x12\x0c\n\x04role\x18\x06 \x01(\t\"!\n\x0eSignUpResponse\x12\x0f\n\x07message\x18\x01 \x01(\t2\xf0\x01\n\x0b\x41uthService\x12\x30\n\x05Login\x12\x12.auth.LoginRequest\x1a\x13.auth.LoginResponse\x12\x33\n\x06Logout\x12\x13.auth.LogoutRequest\x1a\x14.auth.LogoutResponse\x12\x45\n\x0cRefreshToken\x12\x19.auth.RefreshTokenRequest\x1a\x1a.auth.RefreshTokenResponse\x12\x33\n\x06SignUp\x12\x13.auth.SignUpRequest\x1a\x14.auth.SignUpResponseb\x06proto3')
 
 _globals = globals()
 _builder.BuildMessageAndEnumDescriptors(DESCRIPTOR, _globals)
@@ -34,15 +34,19 @@ if not _descriptor._USE_C_DESCRIPTORS:
   _globals['_LOGINREQUEST']._serialized_start=20
   _globals['_LOGINREQUEST']._serialized_end=70
   _globals['_LOGINRESPONSE']._serialized_start=72
-  _globals['_LOGINRESPONSE']._serialized_end=152
-  _globals['_LOGOUTREQUEST']._serialized_start=154
-  _globals['_LOGOUTREQUEST']._serialized_end=192
-  _globals['_LOGOUTRESPONSE']._serialized_start=194
-  _globals['_LOGOUTRESPONSE']._serialized_end=227
-  _globals['_REFRESHTOKENREQUEST']._serialized_start=229
-  _globals['_REFRESHTOKENREQUEST']._serialized_end=273
-  _globals['_REFRESHTOKENRESPONSE']._serialized_start=275
-  _globals['_REFRESHTOKENRESPONSE']._serialized_end=362
-  _globals['_AUTHSERVICE']._serialized_start=365
-  _globals['_AUTHSERVICE']._serialized_end=552
+  _globals['_LOGINRESPONSE']._serialized_end=183
+  _globals['_LOGOUTREQUEST']._serialized_start=185
+  _globals['_LOGOUTREQUEST']._serialized_end=245
+  _globals['_LOGOUTRESPONSE']._serialized_start=247
+  _globals['_LOGOUTRESPONSE']._serialized_end=280
+  _globals['_REFRESHTOKENREQUEST']._serialized_start=282
+  _globals['_REFRESHTOKENREQUEST']._serialized_end=326
+  _globals['_REFRESHTOKENRESPONSE']._serialized_start=328
+  _globals['_REFRESHTOKENRESPONSE']._serialized_end=415
+  _globals['_SIGNUPREQUEST']._serialized_start=417
+  _globals['_SIGNUPREQUEST']._serialized_end=536
+  _globals['_SIGNUPRESPONSE']._serialized_start=538
+  _globals['_SIGNUPRESPONSE']._serialized_end=571
+  _globals['_AUTHSERVICE']._serialized_start=574
+  _globals['_AUTHSERVICE']._serialized_end=814
 # @@protoc_insertion_point(module_scope)

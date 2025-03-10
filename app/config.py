@@ -31,3 +31,9 @@ class Config:
 
     # Keycloak public key (used for token verification)
     KEYCLOAK_PUBLIC_KEY = os.getenv('KEYCLOAK_PUBLIC_KEY', '')
+
+    # Keycloak admin username
+    KEYCLOAK_ADMIN_USERNAME = os.getenv('KEYCLOAK_ADMIN_USERNAME', 'admin')
+
+    # Keycloak admin password
+    KEYCLOAK_ADMIN_PASSWORD = os.getenv('KEYCLOAK_ADMIN_PASSWORD', 'admin')

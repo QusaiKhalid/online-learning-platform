@@ -23,3 +23,22 @@ if 'users' in tables:
     print("The 'users' table exists.")
 else:
     print("The 'users' table does not exist.")
+
+
+
+
+
+from keycloak import KeycloakAdmin
+
+keycloak_admin = KeycloakAdmin(
+    server_url="http://localhost:8080",
+    username="hello",
+    password="123",
+    realm_name="online-learning-platform",
+    client_id="flask-backend",
+    client_secret_key="Okb6fbRp1JHooQp89Zk60exEUSPXUaNg",
+    verify=True
+)
+
+roles = keycloak_admin.get_realm_roles()
+print(roles)

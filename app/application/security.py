@@ -70,9 +70,9 @@ def validate_token(token: str):
         logger.error(f"Token validation failed: {str(e)}")
         raise AuthenticationError(grpc.StatusCode.UNAUTHENTICATED, "Invalid token")
     
-def authenticate(context, required_roles=None):
+def authenticate(context):
     """
-    Authenticate the user and validate their roles.
+    Authenticate the user and validate their token.
     """
     try:
         logger.info("Authenticating user")
@@ -85,13 +85,8 @@ def authenticate(context, required_roles=None):
 
         token = auth_header.split('Bearer ')[1]
 
+        # Validate the token
         token_info = validate_token(token)
-        user_roles = token_info.get('realm_access', {}).get('roles', [])
-
-        logger.info(f"User roles: {user_roles}")
-        if required_roles and not any(role in user_roles for role in required_roles):
-            logger.error("Insufficient permissions")
-            raise AuthenticationError(grpc.StatusCode.PERMISSION_DENIED, 'Insufficient permissions')
 
         logger.info(f"User {token_info.get('preferred_username')} authenticated successfully")
         return token_info
@@ -108,8 +103,6 @@ def authorize_with_opa(context, action, resource_type, resource_id=None):
     Perform OPA authorization for the given action and resource.
     """
     try:
-        logger.info(f"Action: {action}, Resource type: {resource_type}, Resource ID: {resource_id}")
-
         logger.info("Authorizing with OPA")
         # Authenticate the user and retrieve their roles
         token_info = authenticate(context)
@@ -120,10 +113,12 @@ def authorize_with_opa(context, action, resource_type, resource_id=None):
             "roles": user_roles
         }
         logger.info(f"User info: {user_info}")
+
         # Validate resource ID to prevent injection attacks
         if resource_id and not isinstance(resource_id, str):
             logger.error("Invalid resource ID")
             raise AuthenticationError(grpc.StatusCode.INVALID_ARGUMENT, "Invalid resource ID")
+        
         # Call OPA for authorization
         opa_url = "http://localhost:8181/v1/data/authz/allow"
         input_data = {
@@ -136,7 +131,6 @@ def authorize_with_opa(context, action, resource_type, resource_id=None):
                 }
             }
         }
-
         logger.info(f"Sending request to OPA: {input_data}")
         response = requests.post(opa_url, json=input_data)
         if response.status_code != 200:

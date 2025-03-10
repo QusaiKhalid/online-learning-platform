@@ -48,6 +48,11 @@ class AuthServiceStub(object):
                 request_serializer=auth__pb2.RefreshTokenRequest.SerializeToString,
                 response_deserializer=auth__pb2.RefreshTokenResponse.FromString,
                 _registered_method=True)
+        self.SignUp = channel.unary_unary(
+                '/auth.AuthService/SignUp',
+                request_serializer=auth__pb2.SignUpRequest.SerializeToString,
+                response_deserializer=auth__pb2.SignUpResponse.FromString,
+                _registered_method=True)
 
 
 class AuthServiceServicer(object):
@@ -71,6 +76,12 @@ class AuthServiceServicer(object):
         context.set_details('Method not implemented!')
         raise NotImplementedError('Method not implemented!')
 
+    def SignUp(self, request, context):
+        """Missing associated documentation comment in .proto file."""
+        context.set_code(grpc.StatusCode.UNIMPLEMENTED)
+        context.set_details('Method not implemented!')
+        raise NotImplementedError('Method not implemented!')
+
 
 def add_AuthServiceServicer_to_server(servicer, server):
     rpc_method_handlers = {
@@ -88,6 +99,11 @@ def add_AuthServiceServicer_to_server(servicer, server):
                     servicer.RefreshToken,
                     request_deserializer=auth__pb2.RefreshTokenRequest.FromString,
                     response_serializer=auth__pb2.RefreshTokenResponse.SerializeToString,
+            ),
+            'SignUp': grpc.unary_unary_rpc_method_handler(
+                    servicer.SignUp,
+                    request_deserializer=auth__pb2.SignUpRequest.FromString,
+                    response_serializer=auth__pb2.SignUpResponse.SerializeToString,
             ),
     }
     generic_handler = grpc.method_handlers_generic_handler(
@@ -171,6 +187,33 @@ class AuthService(object):
             '/auth.AuthService/RefreshToken',
             auth__pb2.RefreshTokenRequest.SerializeToString,
             auth__pb2.RefreshTokenResponse.FromString,
+            options,
+            channel_credentials,
+            insecure,
+            call_credentials,
+            compression,
+            wait_for_ready,
+            timeout,
+            metadata,
+            _registered_method=True)
+
+    @staticmethod
+    def SignUp(request,
+            target,
+            options=(),
+            channel_credentials=None,
+            call_credentials=None,
+            insecure=False,
+            compression=None,
+            wait_for_ready=None,
+            timeout=None,
+            metadata=None):
+        return grpc.experimental.unary_unary(
+            request,
+            target,
+            '/auth.AuthService/SignUp',
+            auth__pb2.SignUpRequest.SerializeToString,
+            auth__pb2.SignUpResponse.FromString,
             options,
             channel_credentials,
             insecure,
