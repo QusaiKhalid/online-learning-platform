@@ -32,7 +32,7 @@ def create_app():
         doc='/api/docs'
     )
 
-    # Register namespaces
+    # Register namespaces (I tried to create restful api for communication between frontend and backend using Flask-RESTX and to compare it with gRPC)
     register_user_routes(api)
     register_auth_routes(api)
 

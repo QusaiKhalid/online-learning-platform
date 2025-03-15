@@ -6,7 +6,7 @@ from concurrent import futures
 from sqlalchemy import create_engine
 from sqlalchemy.orm import sessionmaker
 
-# Add the project root directory to the Python path
+# Add the project root directory to the Python path (because a problem with imports due to venv)
 PROJECT_ROOT = os.path.abspath(os.path.join(os.path.dirname(__file__), '..'))
 sys.path.append(PROJECT_ROOT)
 
@@ -18,15 +18,13 @@ from protos.generated import auth_pb2_grpc
 from app.application.gRPC_services.user_servise import UserService
 from app.application.gRPC_services.auth_service import AuthServicer
 
-from app.infrastructure.repositories.user_repository import UserRepository  # Concrete implementation
+from app.infrastructure.repositories.user_repository import UserRepository # Import the UserRepository implementation
 
-# Configure logging
+# Configure logging (For testing purposes)
 logging.basicConfig(level=logging.DEBUG)
 
 # Debugging: Log the environment variable and constructed database URL
-# Use the database URL from the Config class
 DATABASE_URL = "sqlite:///C:/Internship/1st Task/online-learning-platform/instance/app.db"
-logging.debug(f"Using DATABASE_URL: {DATABASE_URL}")
 
 # Database setup (SQLAlchemy)
 try:
