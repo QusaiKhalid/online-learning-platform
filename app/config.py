@@ -1,8 +1,12 @@
 import os
+from pathlib import Path
 from dotenv import load_dotenv
 
 # Load environment variables from the .env file
 load_dotenv()
+
+# Get the absolute path to the instance directory
+instance_path = Path("C:/Internship/1st Task/online-learning-platform/instance")
 
 class Config:
     # Debug mode (set to False in production)
@@ -12,7 +16,7 @@ class Config:
     SECRET_KEY = os.getenv('SECRET_KEY', 'default_secret_key')
 
     # Database connection string
-    SQLALCHEMY_DATABASE_URI = os.getenv('DATABASE_URL', 'sqlite:///instance/app.db')
+    SQLALCHEMY_DATABASE_URI = f'sqlite:///{instance_path / "app.db"}'
 
     # Disable SQLAlchemy event system to reduce overhead
     SQLALCHEMY_TRACK_MODIFICATIONS = False
